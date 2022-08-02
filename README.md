@@ -1,2 +1,2 @@
-# 42_malloc
-42 - A dynamic allocation memory management library.
+# MALLOC (@42paris)
+*A dynamic allocation memory management library.*
