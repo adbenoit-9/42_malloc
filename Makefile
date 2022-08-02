@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/02 19:57:37 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/02 20:32:16 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,6 @@ clean:
 
 fclean: clean
 	@rm -Rf $(LINK)
-	@echo "$(DELETE)"
 	@echo "[$(DELETE)] $(LINK)"
 	@rm -Rf $(NAME)
 	@echo "[$(DELETE)] $(NAME)"
@@ -106,5 +105,5 @@ $(BUILD):
 	@mkdir $@ $(DIRS)
 
 $(OBJ_DIR)/%.o:$(SRC_DIR)/%.c ./incs/malloc.h | $(BUILD)
-	@echo -n "$(CL_LINE)[$(COMP)] $< ...\r"
+	@printf "$(CL_LINE)[$(COMP)] $< ...\r"
 	@$(CC) $(CFLAGS) $(IFLAGS) -fPIC -c $< -o $@
