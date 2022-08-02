@@ -1,20 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tolower.c                                       :+:      :+:    :+:   */
+/*   tests.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbenoit <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/04 14:18:28 by adbenoit          #+#    #+#             */
-/*   Updated: 2019/11/11 14:07:10 by adbenoit         ###   ########.fr       */
+/*   Created: 2022/08/02 19:15:40 by adbenoit          #+#    #+#             */
+/*   Updated: 2022/08/02 19:33:11 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./incs/malloc.h"
 
-int	ft_tolower(int c)
+int main(void)
 {
-	if (c >= 'A' && c <= 'Z')
-		c += 32;
-	return (c);
+    char *ptr;
+    
+    printf("yo1\n");
+    ptr = malloc(4);
+    printf("%p\n", ptr);
+    return (0);
 }

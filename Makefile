@@ -6,13 +6,13 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/02 14:31:50 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/02 19:57:37 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # COMPILATION
 CC		= gcc
-CFLAGS 	= -Wall -Wextra -Werror #-fsanitize=address -g3
+CFLAGS 	= -Wall -Wextra -Werror -fsanitize=address -g3
 IFLAGS 	= -I./incs
 
 UNAME	:= $(shell uname)
@@ -23,10 +23,6 @@ endif
 ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
-
-# LIBFT
-LIB_DIR			:= libft
-LIB_NAME		:= $(LIB_DIR)/libft.a
 
 # DIRECTORIES
 BUILD 			:= .build
@@ -49,47 +45,57 @@ OBJ				:= $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 
 # COLORS
-NONE			= \033[0m
-CL_LINE			= \033[2K
-B_RED			= \033[1;31m
-B_GREEN			= \033[1;32m
-B_GREY	 		= \033[1;38m
-B_MAGENTA 		= \033[1;35m
-B_CYAN 			= \033[1;36m
-B_BLUE 			= \033[1;34m
-B_YELLOW 		= \033[1;33m
-B_WHITE 		= \033[1;37m
+NONE			= "\033[0m"
+CL_LINE			= "\033[2K"
+B_RED			= "\033[1;31m"
+B_GREEN			= "\033[1;32m"
+B_GREY	 		= "\033[1;38m"
+B_MAGENTA 		= "\033[1;35m"
+B_CYAN 			= "\033[1;36m"
+B_BLUE 			= "\033[1;34m"
+B_YELLOW 		= "\033[1;33m"
+B_WHITE 		= "\033[1;37m"
 
+# STATUS
+DELETE			= "  $(B_MAGENTA)DELETE$(NONE)  "
+OK				= "    $(B_GREEN)OK$(NONE)    "
+KO				= "    $(B_RED)KO$(NONE)    "
+LINK_OK			= "   $(B_YELLOW)LINK$(NONE)   "
+LINK_KO			= "$(B_RED)LINK ERROR$(NONE)"
+COMP			= " $(B_CYAN)COMPILING$(NONE)"
 
 # MAKEFILE
-$(NAME): $(LIB_NAME) $(OBJ)
+$(NAME): $(OBJ)
 	@printf "$(CL_LINE)"
-	@ar rc $(NAME) $(LIB_NAME) $(OBJ)
-	@echo "[1 / 1] - $(B_MAGENTA)$@"
-	@echo "$(B_GREEN)Compilation done !$(NONE)"
-	@rm -Rf $(LINK)
-	@ln -s $(NAME) $(LINK) 2> /dev/null
-	@echo "$(LINK) -> $(NAME)"
-	
-$(LIB_NAME):
-	@echo -n "$(B_WHITE)libft "
-	@make -C $(LIB_DIR) > /dev/null
-	@echo "$(B_GREEN)✔$(NONE)"
+	@($(CC) $(CFLAGS) -shared -o $(NAME) $(OBJ) \
+		&& echo "[$(OK)] $@") \
+		|| echo "[$(KO)] $@" 
+	@(ln -s $(NAME) $(LINK) 2> /dev/null \
+		&& echo "[$(LINK_OK)] $(LINK)") \
+		|| echo "[$(LINK_KO)] $(LINK)"
+
 
 all: $(NAME)
 
 clean:
-	@make clean -C $(LIB_DIR) > /dev/null
 	@rm -Rf $(BUILD)
-	@echo "$(B_GREY)$(BUILD)$(NONE): $(B_YELLOW)Delete$(NONE)"
+	@echo "[$(DELETE)] $(BUILD)"
 
 fclean: clean
-	@rm -Rf $(NAME)
 	@rm -Rf $(LINK)
-	@rm -Rf $(LIB_NAME)
-	@echo "$(B_GREY)$(NAME)$(NONE): $(B_YELLOW)Delete$(NONE)"
+	@echo "$(DELETE)"
+	@echo "[$(DELETE)] $(LINK)"
+	@rm -Rf $(NAME)
+	@echo "[$(DELETE)] $(NAME)"
 
 re: fclean all
+
+test: re
+	@echo ""
+	@$(CC) $(CFLAGS) $(OBJ) tests.c
+	@echo "\n\t$(B_BLUE)-- TESTS --$(NONE)"
+	@./a.out
+	@rm -Rf a.out
 
 debug: CFLAGS += -DDEBUG
 debug: re
@@ -100,5 +106,5 @@ $(BUILD):
 	@mkdir $@ $(DIRS)
 
 $(OBJ_DIR)/%.o:$(SRC_DIR)/%.c ./incs/malloc.h | $(BUILD)
-	@printf "$(CL_LINE)Compiling srcs object : $(B_CYAN)$< $(NONE)...\r"
-	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@ 
+	@echo -n "$(CL_LINE)[$(COMP)] $< ...\r"
+	@$(CC) $(CFLAGS) $(IFLAGS) -fPIC -c $< -o $@
