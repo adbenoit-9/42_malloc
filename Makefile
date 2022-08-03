@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/03 15:18:51 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/03 15:58:32 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ $(NAME): $(OBJ)
 	@printf "$(CL_LINE)"
 	@($(CC) $(CFLAGS) -shared -o $@ $(OBJ) \
 		&& echo "[$(OK)] $@") \
-		|| echo "[$(KO)] $@" 
+		|| (echo "[$(KO)] $@" & false)
 	@(ln -s $@ $(LINK) 2> /dev/null \
 		&& echo "[$(LINK_OK)] $(LINK)") \
 		|| echo "[$(LINK_KO)] $(LINK)"
@@ -82,23 +82,23 @@ $(BUILD):
 
 $(OBJ_DIR)/%.o:$(SRC_DIR)/%.c ./incs/malloc.h | $(BUILD)
 	@printf "$(CL_LINE)[$(COMP)] $< ...\r"
-	@$(CC) $(CFLAGS) $(IFLAGS) -fPIC -pedantic -c $< -o $@
+	@$(CC) $(CFLAGS) $(IFLAGS) -fPIC -c $< -o $@
 
 clean:
 	@rm -Rf $(BUILD)
 	@echo "[$(DELETE)] $(BUILD)"
 
 fclean: clean
-	@rm -Rf $(LINK)
+	@rm -Rf $(LINK) $(NAME)
 	@echo "[$(DELETE)] $(LINK)"
-	@rm -Rf $(NAME)
 	@echo "[$(DELETE)] $(NAME)"
 
 re: fclean all
 
-run: re
-	@echo ""
-	@$(CC) $(CFLAGS) -o run_test tests.c
+run: $(NAME)
+	@$(CC) $(CFLAGS) $(IFLAGS) tests.c $(LINK) -o run_test
+	@echo "[$(OK)] tests"
+	@echo
 	@./run.sh ./run_test
 
 debug: CFLAGS += -DDEBUG

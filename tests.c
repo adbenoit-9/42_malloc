@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 19:15:40 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/02 19:33:11 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/03 15:47:35 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./incs/malloc.h"
+#include "malloc.h"
 
 int main(void)
 {
