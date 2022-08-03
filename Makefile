@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/02 20:32:16 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/03 15:18:51 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,37 +45,44 @@ OBJ				:= $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 
 # COLORS
-NONE			= "\033[0m"
-CL_LINE			= "\033[2K"
-B_RED			= "\033[1;31m"
-B_GREEN			= "\033[1;32m"
-B_GREY	 		= "\033[1;38m"
-B_MAGENTA 		= "\033[1;35m"
-B_CYAN 			= "\033[1;36m"
-B_BLUE 			= "\033[1;34m"
-B_YELLOW 		= "\033[1;33m"
-B_WHITE 		= "\033[1;37m"
+NONE			= \033[0m
+CL_LINE			= \033[2K
+B_RED			= \033[1;31m
+B_GREEN			= \033[1;32m
+B_GREY	 		= \033[1;38m
+B_MAGENTA 		= \033[1;35m
+B_CYAN 			= \033[1;36m
+B_BLUE 			= \033[1;34m
+B_YELLOW 		= \033[1;33m
+B_WHITE 		= \033[1;37m
 
 # STATUS
-DELETE			= "  $(B_MAGENTA)DELETE$(NONE)  "
-OK				= "    $(B_GREEN)OK$(NONE)    "
-KO				= "    $(B_RED)KO$(NONE)    "
-LINK_OK			= "   $(B_YELLOW)LINK$(NONE)   "
-LINK_KO			= "$(B_RED)LINK ERROR$(NONE)"
-COMP			= " $(B_CYAN)COMPILING$(NONE)"
+DELETE			= "\ \ "$(B_MAGENTA)"DELETE"$(NONE)"\ \ "
+OK				= "\ \ \ \ "$(B_GREEN)"OK"$(NONE)"\ \ \ \ "
+KO				= "\ \ \ \ "$(B_RED)"KO"$(NONE)"\ \ \ \ "
+LINK_OK			= "\ \ \ "$(B_YELLOW)"LINK"$(NONE)"\ \ \ "
+LINK_KO			= ""$(B_RED)"LINK ERROR"$(NONE)""
+COMP			= "\ "$(B_CYAN)"COMPILING"$(NONE)""
 
 # MAKEFILE
 $(NAME): $(OBJ)
 	@printf "$(CL_LINE)"
-	@($(CC) $(CFLAGS) -shared -o $(NAME) $(OBJ) \
+	@($(CC) $(CFLAGS) -shared -o $@ $(OBJ) \
 		&& echo "[$(OK)] $@") \
 		|| echo "[$(KO)] $@" 
-	@(ln -s $(NAME) $(LINK) 2> /dev/null \
+	@(ln -s $@ $(LINK) 2> /dev/null \
 		&& echo "[$(LINK_OK)] $(LINK)") \
 		|| echo "[$(LINK_KO)] $(LINK)"
 
 
 all: $(NAME)
+
+$(BUILD):
+	@mkdir $@ $(DIRS)
+
+$(OBJ_DIR)/%.o:$(SRC_DIR)/%.c ./incs/malloc.h | $(BUILD)
+	@printf "$(CL_LINE)[$(COMP)] $< ...\r"
+	@$(CC) $(CFLAGS) $(IFLAGS) -fPIC -pedantic -c $< -o $@
 
 clean:
 	@rm -Rf $(BUILD)
@@ -89,21 +96,12 @@ fclean: clean
 
 re: fclean all
 
-test: re
+run: re
 	@echo ""
-	@$(CC) $(CFLAGS) $(OBJ) tests.c
-	@echo "\n\t$(B_BLUE)-- TESTS --$(NONE)"
-	@./a.out
-	@rm -Rf a.out
+	@$(CC) $(CFLAGS) -o run_test tests.c
+	@./run.sh ./run_test
 
 debug: CFLAGS += -DDEBUG
 debug: re
 
-.PHONY: all clean fclean re debug
-
-$(BUILD):
-	@mkdir $@ $(DIRS)
-
-$(OBJ_DIR)/%.o:$(SRC_DIR)/%.c ./incs/malloc.h | $(BUILD)
-	@printf "$(CL_LINE)[$(COMP)] $< ...\r"
-	@$(CC) $(CFLAGS) $(IFLAGS) -fPIC -c $< -o $@
+.PHONY: all clean fclean re debug run
