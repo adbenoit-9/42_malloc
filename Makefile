@@ -6,13 +6,13 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/04 11:32:52 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/04 14:46:35 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # COMPILATION
 CC		= gcc
-CFLAGS 	= -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS 	= -Wall -Wextra -Werror #-fsanitize=address -g3
 IFLAGS 	= -I./incs
 
 UNAME	:= $(shell uname)
@@ -34,7 +34,8 @@ DIRS			:= $(OBJ_DIR) $(addprefix $(OBJ_DIR)/, $(SUB_DIR))
 
 # FILES
 NAME			:= libft_malloc_$(HOSTTYPE).so
-LINK			:= libft_malloc.so
+LINK_NAME		:= libft_malloc.so
+TEST_EXEC		:= run_test
 SRC				:=	malloc.c \
 					free.c \
 					realloc.c
@@ -66,14 +67,11 @@ COMP			= "\ "$(B_CYAN)"COMPILING"$(NONE)""
 
 # MAKEFILE
 $(NAME): $(OBJ)
-	@printf "$(CL_LINE)"
-	@($(CC) $(CFLAGS) -shared -o $@ $(OBJ) \
-		&& echo "[$(OK)] $@") \
-		|| (echo "[$(KO)] $@" & false)
-	@(ln -sf $@ $(LINK) 2> /dev/null \
-		&& echo "[$(LINK_OK)] $(LINK)") \
-		|| echo "[$(LINK_KO)] $(LINK)"
-
+	@$(CC) $(CFLAGS) -shared -o $@ $(OBJ)
+	@echo "$(CL_LINE)[$(OK)] $@"
+	@(ln -sf $@ $(LINK_NAME) 2> /dev/null \
+		&& echo "[$(LINK_OK)] $(LINK_NAME)") \
+		|| echo "[$(LINK_KO)] $(LINK_NAME)"
 
 all: $(NAME)
 
@@ -89,17 +87,17 @@ clean:
 	@echo "[$(DELETE)] $(BUILD)"
 
 fclean: clean
-	@rm -Rf $(LINK) $(NAME)
-	@echo "[$(DELETE)] $(LINK)"
+	@rm -Rf $(LINK_NAME) $(NAME) $(TEST_EXEC)
+	@echo "[$(DELETE)] $(LINK_NAME)"
 	@echo "[$(DELETE)] $(NAME)"
 
 re: fclean all
 
 run: $(NAME)
-	@$(CC) $(CFLAGS) $(IFLAGS) tests.c $(LINK) -o run_test
+	@$(CC) $(CFLAGS) $(IFLAGS) tests.c $(LINK_NAME) -o run_test
 	@echo "[$(OK)] tests"
 	@echo
-	@./run.sh ./run_test
+	@./run.sh ./$(TEST_EXEC)
 
 debug: CFLAGS += -DDEBUG
 debug: re

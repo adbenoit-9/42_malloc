@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 19:15:40 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/03 15:47:35 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/04 14:37:48 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 int main(void)
 {
-    char *ptr;
+    // char *ptr;
     
-    printf("yo1\n");
-    ptr = malloc(4);
-    printf("%p\n", ptr);
+    // ptr = malloc(4);
+    // write(STDIN_FILENO, ptr, 4);
     return (0);
 }

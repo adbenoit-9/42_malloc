@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/03 15:52:10 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/04 14:39:16 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	*malloc(size_t size)
 {
-    printf("yo\n");
-    printf("%ld| page size : %d\n", size, getpagesize());
+    (void)size;
+    write(STDIN_FILENO, "yo\n", 3);
     return (NULL);
 }
