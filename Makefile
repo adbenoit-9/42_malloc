@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/04 14:46:35 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/04 15:02:58 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,18 +29,24 @@ BUILD 			:= .build
 SRC_DIR 		:= srcs
 OBJ_DIR 		:= $(BUILD)/obj
 SUB_DIR			:= 
+TEST_DIR		:= tests
 DIRS			:= $(OBJ_DIR) $(addprefix $(OBJ_DIR)/, $(SUB_DIR))
 
 
 # FILES
 NAME			:= libft_malloc_$(HOSTTYPE).so
 LINK_NAME		:= libft_malloc.so
-TEST_EXEC		:= run_test
+TEST_EXEC		:= tests_malloc
 SRC				:=	malloc.c \
 					free.c \
 					realloc.c
 SUB_SRC			:= 
 # SRC				+= $(addprefix {name}, $(SUB_SRC))
+TEST_SRC		:=	main.c \
+					malloc_tests.c \
+					realloc_tests.c \
+					free_tests.c
+TEST_SRC		:= $(addprefix $(TEST_DIR)/, $(TEST_SRC))
 
 OBJ				:= $(SRC:%.c=$(OBJ_DIR)/%.o)
 
@@ -94,7 +100,7 @@ fclean: clean
 re: fclean all
 
 run: $(NAME)
-	@$(CC) $(CFLAGS) $(IFLAGS) tests.c $(LINK_NAME) -o run_test
+	@$(CC) $(CFLAGS) $(IFLAGS) $(TEST_SRC) $(LINK_NAME) -o $(TEST_EXEC)
 	@echo "[$(OK)] tests"
 	@echo
 	@./run.sh ./$(TEST_EXEC)

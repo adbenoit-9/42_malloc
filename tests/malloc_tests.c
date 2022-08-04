@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.c                                            :+:      :+:    :+:   */
+/*   malloc_tests.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/02 19:15:40 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/04 14:37:48 by adbenoit         ###   ########.fr       */
+/*   Created: 2022/08/04 15:04:09 by adbenoit          #+#    #+#             */
+/*   Updated: 2022/08/04 15:04:35 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "tests.h"
 
-int main(void)
+void    malloc_tests(void)
 {
-    // char *ptr;
     
-    // ptr = malloc(4);
-    // write(STDIN_FILENO, ptr, 4);
-    return (0);
 }
