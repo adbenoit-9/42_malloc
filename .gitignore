@@ -54,3 +54,4 @@ dkms.conf
 .build
 .vscode*
 libft_malloc*
+tests_malloc

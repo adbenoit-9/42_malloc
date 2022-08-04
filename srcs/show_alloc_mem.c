@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tests.h                                            :+:      :+:    :+:   */
+/*   show_alloc_mem.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 15:00:00 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/04 16:18:07 by adbenoit         ###   ########.fr       */
+/*   Created: 2022/08/04 15:14:29 by adbenoit          #+#    #+#             */
+/*   Updated: 2022/08/04 15:15:37 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TESTS_H
-# define TESTS_H
+#include "malloc.h"
 
-# include "malloc.h"
-
-void    malloc_tests(void);
-void    realloc_tests(void);
-void    free_tests(void);
-
-#endif
+void	show_alloc_mem(void)
+{
+		
+}

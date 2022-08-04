@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/04 15:02:58 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/04 15:21:48 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,8 @@ LINK_NAME		:= libft_malloc.so
 TEST_EXEC		:= tests_malloc
 SRC				:=	malloc.c \
 					free.c \
-					realloc.c
+					realloc.c \
+					show_alloc_mem.c
 SUB_SRC			:= 
 # SRC				+= $(addprefix {name}, $(SUB_SRC))
 TEST_SRC		:=	main.c \
