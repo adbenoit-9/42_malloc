@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/04 10:57:43 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/04 11:32:52 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,7 +70,7 @@ $(NAME): $(OBJ)
 	@($(CC) $(CFLAGS) -shared -o $@ $(OBJ) \
 		&& echo "[$(OK)] $@") \
 		|| (echo "[$(KO)] $@" & false)
-	@(ln -s $@ $(LINK) 2> /dev/null \
+	@(ln -sf $@ $(LINK) 2> /dev/null \
 		&& echo "[$(LINK_OK)] $(LINK)") \
 		|| echo "[$(LINK_KO)] $(LINK)"
 
