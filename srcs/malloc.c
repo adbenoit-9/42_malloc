@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/04 18:19:30 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/05 11:29:25 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ t_malloc_state   state = {NULL, NULL};
 
 size_t   get_offset(void)
 {
+    if (!state.free_area || !state.heap_begin)
+        return (0);
     size_t n = state.free_area - state.heap_begin;
     size_t pagesize = getpagesize();
     if (n % pagesize == 0)
