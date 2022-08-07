@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/05 15:19:35 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/07 16:53:21 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,11 @@
 # include <sys/mman.h>
 # include <string.h>
 # include <errno.h>
-
-# ifndef OS
-
-typedef unsigned char u_int8_t;
-
-# endif
+# include <stdint.h>
 
 # define NBINS 3
 // # define NLARGE 128 * 1024
+# define PRINT(s) write(STDIN_FILENO, s, strlen(s))
 
 typedef enum	e_bin_type
 {
@@ -35,10 +31,10 @@ typedef enum	e_bin_type
 	LARGE
 }				bin_type;
 
-typedef struct	s_bin
-{
+// typedef struct	s_bin
+// {
 	
-};
+// };
 
 typedef struct	s_chunk
 {
@@ -61,7 +57,6 @@ void	free(void *ptr);
 void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);
 void	show_alloc_mem(void);
-
-# define PRINT(s) write(STDIN_FILENO, s, strlen(s))
+void	ft_putnbr_base(int64_t n, char *base);
 
 #endif

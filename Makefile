@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/04 15:21:48 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/07 14:04:12 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ endif
 BUILD 			:= .build
 SRC_DIR 		:= srcs
 OBJ_DIR 		:= $(BUILD)/obj
-SUB_DIR			:= 
+SUB_DIR			:= utils
 TEST_DIR		:= tests
 DIRS			:= $(OBJ_DIR) $(addprefix $(OBJ_DIR)/, $(SUB_DIR))
 
@@ -41,8 +41,9 @@ SRC				:=	malloc.c \
 					free.c \
 					realloc.c \
 					show_alloc_mem.c
-SUB_SRC			:= 
-# SRC				+= $(addprefix {name}, $(SUB_SRC))
+SUB_SRC			:= ft_putnbr_base.c
+SRC				+= $(addprefix utils/, $(SUB_SRC))
+
 TEST_SRC		:=	main.c \
 					malloc_tests.c \
 					realloc_tests.c \
