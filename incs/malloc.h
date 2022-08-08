@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/07 16:53:21 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/08 19:58:53 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <sys/mman.h>
 # include <string.h>
 # include <errno.h>
+# include <stdbool.h>
 # include <stdint.h>
 
 # define NBINS 3
@@ -31,10 +32,9 @@ typedef enum	e_bin_type
 	LARGE
 }				bin_type;
 
-// typedef struct	s_bin
-// {
-	
-// };
+# define ISTINY(size) size < 350 ? true : false
+# define ISSMALL(size) size >= 350 && size < 4000 ? true : false
+# define ISLARGE(size) size >= 4000 ? true : false
 
 typedef struct	s_chunk
 {
@@ -47,7 +47,8 @@ typedef struct	s_chunk
 
 typedef struct	s_malloc_state
 {
-	t_chunk	bins[NBINS];
+	t_chunk	*bins[NBINS];
+	void	*top;
 	
 }               t_malloc_state;
 
