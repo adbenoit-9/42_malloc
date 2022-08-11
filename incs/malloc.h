@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/08 19:58:53 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/11 13:03:08 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,22 @@
 # include <stdbool.h>
 # include <stdint.h>
 
-# define NBINS 3
-// # define NLARGE 128 * 1024
 # define PRINT(s) write(STDIN_FILENO, s, strlen(s))
+# define NONE 0
 
-typedef enum	e_bin_type
-{
-	TINY,
-	SMALL,
-	LARGE
-}				bin_type;
+/* zones */
 
-# define ISTINY(size) size < 350 ? true : false
-# define ISSMALL(size) size >= 350 && size < 4000 ? true : false
-# define ISLARGE(size) size >= 4000 ? true : false
+# define NBINS (int8_t)3
+# define TINY (int8_t)0
+# define SMALL (int8_t)1
+# define LARGE (int8_t)2
+# define MAX_TINY (int16_t)21
+# define MAX_SMALL (int16_t)65536
+# define ISTINY(size) (size < MAX_TINY)
+# define ISSMALL(size) (size >= MAX_TINY && size < MAX_SMALL)
+# define ISLARGE(size) (size >= MAX_SMALL)
+
+# define HEAD_SIZE sizeof(t_chunk)
 
 typedef struct	s_chunk
 {
@@ -52,7 +54,7 @@ typedef struct	s_malloc_state
 	
 }               t_malloc_state;
 
-extern  t_malloc_state   state;
+extern  t_malloc_state   g_state;
 
 void	free(void *ptr);
 void	*malloc(size_t size);
