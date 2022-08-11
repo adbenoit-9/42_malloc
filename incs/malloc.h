@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/11 13:03:08 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/11 17:04:37 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,25 @@
 
 # define PRINT(s) write(STDIN_FILENO, s, strlen(s))
 # define NONE 0
+# define HEXA "0123456789ABCDEF"
+# define DEC "0123456789"
+# define LONG_INT(ptr) (int64_t)ptr
+
+# define A (size_t)1 << (sizeof(size_t) - 1)
+# define M (size_t)1 << (sizeof(size_t) - 2)
+# define P (size_t)1 << (sizeof(size_t) - 3)
 
 /* zones */
 
-# define NBINS (int8_t)3
+# define NZONES (int8_t)3
 # define TINY (int8_t)0
 # define SMALL (int8_t)1
 # define LARGE (int8_t)2
-# define MAX_TINY (int16_t)21
-# define MAX_SMALL (int16_t)65536
-# define ISTINY(size) (size < MAX_TINY)
-# define ISSMALL(size) (size >= MAX_TINY && size < MAX_SMALL)
-# define ISLARGE(size) (size >= MAX_SMALL)
+# define MAX_TINY 21
+# define MAX_SMALL 65536
+# define ISTINY(size) (size <= MAX_TINY)
+# define ISSMALL(size) (size > MAX_TINY && size <= MAX_SMALL)
+# define ISLARGE(size) (size > MAX_SMALL)
 
 # define HEAD_SIZE sizeof(t_chunk)
 
@@ -49,7 +56,7 @@ typedef struct	s_chunk
 
 typedef struct	s_malloc_state
 {
-	t_chunk	*bins[NBINS];
+	t_chunk	*zones[NZONES];
 	void	*top;
 	
 }               t_malloc_state;
@@ -61,5 +68,6 @@ void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);
 void	show_alloc_mem(void);
 void	ft_putnbr_base(int64_t n, char *base);
+void	ft_bzero(void *s, size_t n);
 
 #endif
