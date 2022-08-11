@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:09 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/11 17:03:29 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/11 19:09:39 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ void    malloc_tests(void)
     show_alloc_mem();
     small_zone();
     show_alloc_mem();
-    large_zone();
-    show_alloc_mem();
+    // large_zone();
+    // show_alloc_mem();
 }

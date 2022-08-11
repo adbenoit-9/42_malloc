@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/11 17:04:37 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/11 18:58:40 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@
 # define DEC "0123456789"
 # define LONG_INT(ptr) (int64_t)ptr
 
-# define A (size_t)1 << (sizeof(size_t) - 1)
-# define M (size_t)1 << (sizeof(size_t) - 2)
-# define P (size_t)1 << (sizeof(size_t) - 3)
+# define STATUS_A (size_t)1 << (sizeof(size_t) * 8 - 1)
+# define STATUS_M (size_t)1 << (sizeof(size_t) * 8 - 2)
+# define STATUS_P (size_t)1 << (sizeof(size_t) * 8 - 3)
+# define GET_SIZE(n) (n & ~(STATUS_A | STATUS_M | STATUS_P))
+# define GET_STATUS(n) (n & (STATUS_A | STATUS_M | STATUS_P))
 
 /* zones */
 
@@ -57,7 +59,7 @@ typedef struct	s_chunk
 typedef struct	s_malloc_state
 {
 	t_chunk	*zones[NZONES];
-	void	*top;
+	t_chunk	*bins[NZONES];
 	
 }               t_malloc_state;
 
