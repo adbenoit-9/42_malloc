@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/12 15:34:52 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/12 16:26:15 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void    *large_alloc(size_t size)
 	if (g_state.zones[LARGE] != 0x0) {
         chunk->next = g_state.zones[LARGE];
         g_state.zones[LARGE]->previous = chunk;
+        g_state.zones[LARGE]->prev_size = size;
     }
     g_state.zones[LARGE] = chunk;
     chunk->size = size;
