@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/12 13:01:40 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/12 15:34:52 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void    *create_heap(int8_t zone, size_t size)
 {
 	void    *ptr;
 	size_t	length;
-	void	*ptr;
 
 	if (zone != LARGE) {
 		length = (size + HEAD_SIZE) * 100;
@@ -60,7 +59,7 @@ void    *create_heap(int8_t zone, size_t size)
 		| MAP_ANON, -1, 0);
 	ft_bzero(ptr, length);
 	if (errno)
-		return (NULL);
+		return (0x0);
 	return (ptr);
 }
 
@@ -79,10 +78,26 @@ void    *find_free_space(int8_t zone, uint32_t zone_size)
 		* getpagesize() / (zone_size + HEAD_SIZE);
 	for (size_t i = 0; GET_SIZE(((t_chunk *)ptr)->size) != 0; i++) {
 		if (i == max - 1)
-			return (NULL);
+			return (0x0);
 		ptr += zone_size + HEAD_SIZE;
 	}
 	return (ptr);
+}
+
+void    *large_alloc(size_t size)
+{
+    t_chunk *chunk;
+
+    chunk = create_heap(LARGE, size);
+    if (chunk == 0x0)
+        return (0x0);
+	if (g_state.zones[LARGE] != 0x0) {
+        chunk->next = g_state.zones[LARGE];
+        g_state.zones[LARGE]->previous = chunk;
+    }
+    g_state.zones[LARGE] = chunk;
+    chunk->size = size;
+    return (chunk);
 }
 
 void    *alloc(int8_t zone, size_t size, uint32_t zone_size)
@@ -98,9 +113,9 @@ void    *alloc(int8_t zone, size_t size, uint32_t zone_size)
 	else {
 		chunk = find_free_space(zone, zone_size);
 	}
-	if (chunk == NULL)
-		return (NULL);
-	chunk->size = size + HEAD_SIZE;
+	if (chunk == 0x0)
+		return (large_alloc(size));
+	chunk->size = size;
 	max = (((zone_size + HEAD_SIZE) * 100) / getpagesize() + 1) \
 		* getpagesize() / (zone_size + HEAD_SIZE);
 	if (chunk < g_state.zones[zone] + max - 1)
@@ -120,7 +135,7 @@ void	*malloc(size_t size)
 		ptr = alloc(SMALL, size, MAX_SMALL);
 	}
 	else {
-		ptr = alloc(LARGE, size, size);
+		ptr = large_alloc(size);
 	}
 	if (ptr)
 		ptr += HEAD_SIZE;

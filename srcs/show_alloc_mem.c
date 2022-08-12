@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:14:29 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/11 19:40:26 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/12 15:46:53 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ void	show_alloc_mem(void)
 {
 	t_chunk		*it;
 	char		*zones[] = {"TINY : ", "SMALL : "};
-	uint32_t	zones_size[] = {MAX_TINY + HEAD_SIZE, MAX_SMALL + HEAD_SIZE};
+	int			zone_size[] = {MAX_TINY, MAX_SMALL};
 	uint64_t	total = 0;
+	size_t		size;
 
 	for (uint8_t i = 0; i < NZONES - 1; i++) {
 		it = g_state.zones[i];
@@ -37,12 +38,16 @@ void	show_alloc_mem(void)
 		PRINT("0x");
 		ft_putnbr_base(LONG_INT(it), HEXA);
 		PRINT("\n");
-		for (uint32_t j = 0; j < 100 && it != 0x0; j++) {
-			if (GET_SIZE(it->size) > HEAD_SIZE) {
+		size = (zone_size[i] + HEAD_SIZE) * 100;
+		size = (size / getpagesize() + 1) * getpagesize();
+		size_t j = 0;
+		while (j < size && it != 0x0) {
+			if (GET_SIZE(it->size) > 0) {
 				print_block(it);
-				total += GET_SIZE(it->size) - HEAD_SIZE;
+				total += GET_SIZE(it->size);
 			}
-			it = (void *)it + zones_size[i];
+			it = (void *)it + it->size + HEAD_SIZE;
+			j += it->size + HEAD_SIZE;
 		}
 	}
 	PRINT("Total : ");
