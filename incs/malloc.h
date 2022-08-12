@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/12 11:23:09 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/12 16:46:34 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <errno.h>
 # include <stdbool.h>
 # include <stdint.h>
+# include <sys/time.h> 
+# include <sys/resource.h>
 
 # define PRINT(s) write(STDIN_FILENO, s, strlen(s))
 # define NONE 0

@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/12 16:26:15 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/12 16:47:44 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void    *create_heap(int8_t zone, size_t size)
 		length = size;
 	}
 	length = (length / getpagesize() + 1) * getpagesize();
+    // check limit of mem getrlimit() ?
 	ptr = mmap(NULL, length, PROT_READ | PROT_WRITE, MAP_SHARED\
 		| MAP_ANON, -1, 0);
 	ft_bzero(ptr, length);
@@ -91,13 +92,13 @@ void    *large_alloc(size_t size)
     chunk = create_heap(LARGE, size);
     if (chunk == 0x0)
         return (0x0);
+    chunk->size = size % 16 == 0 ? size : (size / 16 + 1) * 16;
 	if (g_state.zones[LARGE] != 0x0) {
         chunk->next = g_state.zones[LARGE];
         g_state.zones[LARGE]->previous = chunk;
-        g_state.zones[LARGE]->prev_size = size;
+        g_state.zones[LARGE]->prev_size = chunk->size;
     }
     g_state.zones[LARGE] = chunk;
-    chunk->size = size;
     return (chunk);
 }
 
@@ -116,11 +117,11 @@ void    *alloc(int8_t zone, size_t size, uint32_t zone_size)
 	}
 	if (chunk == 0x0)
 		return (large_alloc(size));
-	chunk->size = size;
+    chunk->size = size % 16 == 0 ? size : (size / 16 + 1) * 16;
 	max = (((zone_size + HEAD_SIZE) * 100) / getpagesize() + 1) \
 		* getpagesize() / (zone_size + HEAD_SIZE);
 	if (chunk < g_state.zones[zone] + max - 1)
-		(chunk + 1)->prev_size = size;
+		(chunk + 1)->prev_size = chunk->size;
 	return (chunk);
 }
 
