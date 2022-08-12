@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/11 19:27:38 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/12 10:51:12 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void    *find_free_space(int8_t zone)
     }
     ptr = g_state.zones[zone];
     while (GET_SIZE(((t_chunk *)ptr)->size) != 0) {
-        print_chunk(ptr);
+        // print_chunk(ptr);
         ptr += (zone == TINY ? MAX_TINY : MAX_SMALL) + HEAD_SIZE;
     }
     return (ptr);
