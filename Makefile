@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/11 15:12:02 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/13 20:10:00 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,9 +38,8 @@ NAME			:= libft_malloc_$(HOSTTYPE).so
 LINK_NAME		:= libft_malloc.so
 TEST_EXEC		:= tests_malloc
 SRC				:=	malloc.c \
-					free.c \
-					realloc.c \
-					show_alloc_mem.c
+					heap.c \
+					print.c
 SUB_SRC			:= ft_putnbr_base.c \
 					ft_bzero.c
 SRC				+= $(addprefix utils/, $(SUB_SRC))

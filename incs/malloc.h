@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/12 16:46:34 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/13 20:54:00 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@
 # define GET_SIZE(n) (n & ~(STATUS_A | STATUS_M | STATUS_P))
 # define GET_STATUS(n) (n & (STATUS_A | STATUS_M | STATUS_P))
 
+# define NBINS (uint8_t)128
+
 /* zones */
 
-# define NZONES (int8_t)3
-# define TINY (int8_t)0
-# define SMALL (int8_t)1
-# define LARGE (int8_t)2
+# define NZONES (uint8_t)3
+# define TINY (uint8_t)0
+# define SMALL (uint8_t)1
+# define LARGE (uint8_t)2
 # define MAX_TINY 21
 # define MAX_SMALL 65536
 # define ISTINY(size) (size <= MAX_TINY)
@@ -48,6 +50,8 @@
 # define ISLARGE(size) (size > MAX_SMALL)
 
 # define HEAD_SIZE sizeof(t_chunk)
+# define ZONE_SIZE(max) (((HEAD_SIZE + max) * 100 / getsizepage() +\
+		(size % getpagesize() == 0)) * getsizepage())
 
 typedef struct	s_chunk
 {
@@ -58,20 +62,18 @@ typedef struct	s_chunk
 	size_t			unused_space;	/* Size in bytes of the unused space. */
 }				t_chunk;
 
-typedef struct	s_malloc_state
-{
-	t_chunk	*zones[NZONES];
-	t_chunk	*bins[NZONES];
-	
-}               t_malloc_state;
-
-extern  t_malloc_state   g_state;
-
 void	free(void *ptr);
 void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);
 void	show_alloc_mem(void);
 void	ft_putnbr_base(int64_t n, char *base);
 void	ft_bzero(void *s, size_t n);
+void    *get_free_addr(t_chunk **bins, size_t size);
+void    set_inuse_chunk(t_chunk *chunk, size_t size, size_t status, t_chunk *next);
+void	print_block(t_chunk *block);
+void	print_zone(t_chunk *addr, char *name);
+void    print_chunk(t_chunk *chunk);
+void    *create_heap(size_t size);
+void    set_free_chunk(t_chunk *chunk, size_t size, t_chunk *next, t_chunk *prev);
 
 #endif

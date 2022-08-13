@@ -6,140 +6,112 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/12 16:47:44 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/13 21:09:52 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-t_malloc_state   g_state = {
-	.zones[TINY] = 0x0,
-	.zones[SMALL] = 0x0,
-	.zones[LARGE] = 0x0,
-	.bins[TINY] = 0x0,
-	.bins[SMALL] = 0x0,
-	.bins[LARGE] = 0x0,
-	};
-
-void    print_chunk(t_chunk *chunk)
-{
-	PRINT("-- chunk --\nstatus: ");
-	if (chunk->size & STATUS_A)
-		PRINT("A");
-	if (chunk->size & STATUS_M)
-		PRINT("M");
-	if (chunk->size & STATUS_P)
-		PRINT("P");
-	PRINT("\nprev_size : ");
-	ft_putnbr_base(chunk->prev_size, DEC);
-	PRINT(" bytes\nsize : ");
-	ft_putnbr_base(GET_SIZE(chunk->size), DEC);
-	PRINT(" bytes\nprevious : 0x");
-	ft_putnbr_base(LONG_INT(chunk->previous), HEXA);
-	PRINT("\nnext : 0x");
-	ft_putnbr_base(LONG_INT(chunk->next), HEXA);
-	PRINT("\nunused_space : ");
-	ft_putnbr_base(chunk->unused_space, DEC);
-	PRINT(" bytes\n-----------\n");
-}
-
-void    *create_heap(int8_t zone, size_t size)
-{
-	void    *ptr;
-	size_t	length;
-
-	if (zone != LARGE) {
-		length = (size + HEAD_SIZE) * 100;
-	}
-	else {
-		length = size;
-	}
-	length = (length / getpagesize() + 1) * getpagesize();
-    // check limit of mem getrlimit() ?
-	ptr = mmap(NULL, length, PROT_READ | PROT_WRITE, MAP_SHARED\
-		| MAP_ANON, -1, 0);
-	ft_bzero(ptr, length);
-	if (errno)
-		return (0x0);
-	return (ptr);
-}
-
-void    *find_free_space(int8_t zone, uint32_t zone_size)
-{
-	t_chunk	*free_ptr = g_state.bins[zone];
-	void	*ptr;
-	size_t	max;
-
-	if (free_ptr != 0x0) {
-		g_state.bins[zone] = free_ptr->next;
-		return (free_ptr);
-	}
-	ptr = g_state.zones[zone];
-	max = (((zone_size + HEAD_SIZE) * 100) / getpagesize() + 1) \
-		* getpagesize() / (zone_size + HEAD_SIZE);
-	for (size_t i = 0; GET_SIZE(((t_chunk *)ptr)->size) != 0; i++) {
-		if (i == max - 1)
-			return (0x0);
-		ptr += zone_size + HEAD_SIZE;
-	}
-	return (ptr);
-}
-
-void    *large_alloc(size_t size)
-{
-    t_chunk *chunk;
-
-    chunk = create_heap(LARGE, size);
-    if (chunk == 0x0)
-        return (0x0);
-    chunk->size = size % 16 == 0 ? size : (size / 16 + 1) * 16;
-	if (g_state.zones[LARGE] != 0x0) {
-        chunk->next = g_state.zones[LARGE];
-        g_state.zones[LARGE]->previous = chunk;
-        g_state.zones[LARGE]->prev_size = chunk->size;
-    }
-    g_state.zones[LARGE] = chunk;
-    return (chunk);
-}
-
-void    *alloc(int8_t zone, size_t size, uint32_t zone_size)
-{
-	t_chunk *chunk;
-	size_t	max;
-
-	if (g_state.zones[zone] == 0x0) {
-		g_state.zones[zone] = create_heap(zone, zone_size);
-		chunk = g_state.zones[zone];
-		chunk->size |= STATUS_P;
-	}
-	else {
-		chunk = find_free_space(zone, zone_size);
-	}
-	if (chunk == 0x0)
-		return (large_alloc(size));
-    chunk->size = size % 16 == 0 ? size : (size / 16 + 1) * 16;
-	max = (((zone_size + HEAD_SIZE) * 100) / getpagesize() + 1) \
-		* getpagesize() / (zone_size + HEAD_SIZE);
-	if (chunk < g_state.zones[zone] + max - 1)
-		(chunk + 1)->prev_size = chunk->size;
-	return (chunk);
-}
+t_chunk	*g_zones[NZONES];
+t_chunk	*g_bins[NBINS];
 
 void	*malloc(size_t size)
 {
 	void	*ptr;
-	
-	errno = 0;
-	if (ISTINY(size)) {
-		ptr = alloc(TINY, size, MAX_TINY);
-	}
-	else if (ISSMALL(size)) {
-		ptr = alloc(SMALL, size, MAX_SMALL);
+	size_t	status;
+	uint8_t	zone;
+
+	status = NONE;
+	size = size % 16 == 0 ? size : (size / 16 + 1) * 16;
+	if (ISLARGE(size)) {
+		ptr = create_heap(size);
+		status = STATUS_M;
+		g_zones[LARGE] = ptr;
 	}
 	else {
-		ptr = large_alloc(size);
+		ptr = get_free_addr(g_bins, size);
+		if (g_zones[ISTINY(size) ? TINY : SMALL] == 0x0)
+			g_zones[ISTINY(size) ? TINY : SMALL] = ptr;
+		if (!ptr) {
+			ptr = create_heap(size);
+			status = STATUS_M;
+		}
 	}
-	if (ptr)
+	if (ptr) {
+		if (status & STATUS_M)
+			zone = LARGE;
+		else if (ISTINY(size))
+			zone = TINY;
+		else
+			zone = SMALL;
+		set_inuse_chunk(ptr, size, status, g_zones[zone]);
 		ptr += HEAD_SIZE;
+	}
 	return (ptr);
+}
+
+void	free(void *ptr)
+{
+    t_chunk *chunk = (t_chunk *)(ptr - HEAD_SIZE);
+
+    if (chunk->size & STATUS_M) {
+        munmap(ptr, GET_SIZE(chunk->size));
+    }
+    else if (chunk->size & STATUS_A) {
+        return ;
+    }
+    else {
+        size_t  size = GET_SIZE(chunk->size);
+        ft_bzero(chunk + HEAD_SIZE, size);
+        chunk->size = size;
+        // add_to_bin(chunk);
+    }
+}
+
+void	*realloc(void *ptr, size_t size)
+{
+	void	*new_ptr;
+
+	if (size)
+		new_ptr = malloc(size);
+	if (ptr && new_ptr)
+		for (size_t i = 0; ((uint8_t *)ptr)[i] && i < size; i++)
+			((uint8_t *)new_ptr)[i] = ((uint8_t *)ptr)[i];
+	free(ptr);
+	return (new_ptr);
+}
+
+void	show_alloc_mem(void)
+{
+	t_chunk		*it;
+	int			zone_size[] = {MAX_TINY, MAX_SMALL};
+	char		*zones_name[] = {"TINY", "SMALL"};
+	uint64_t	total = 0;
+	size_t		size;
+
+	for (uint8_t i = 0; i < NZONES - 1; i++) {
+		it = g_zones[i];
+		size = (zone_size[i] + HEAD_SIZE) * 100;
+		size = (size / getpagesize() + 1) * getpagesize();
+		print_zone(g_zones[i], zones_name[i]);
+		while (it != 0x0 && it->size != 0) {
+			if (GET_SIZE(it->size) > 0) {
+				print_block(it);
+				total += GET_SIZE(it->size);
+			}
+			it = (void *)(it + 1) + GET_SIZE(it->size);
+		}
+	}
+	print_zone(g_zones[LARGE], "LARGE");
+	it = g_zones[LARGE];
+	while (it && it->next)
+		it = it->next;
+	while (it && it->previous) {
+		print_block(it);
+		total += GET_SIZE(it->size);
+		it = it->previous;
+	}
+	PRINT("Total : ");
+	ft_putnbr_base(total, DEC);
+	PRINT("\n");
 }

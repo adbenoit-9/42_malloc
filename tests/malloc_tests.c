@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:09 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/12 12:39:38 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/13 21:10:09 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ void    test(size_t n, char *str) {
 void    test_max_malloc_by_zone()
 {
     show_alloc_mem();
-    for (uint16_t i = 0; i < 140; i++) {
+    for (uint16_t i = 0; i < 10; i++) {
         ft_putnbr_base(i, DEC);
         PRINT(" - ");
         test(13, "tiny hello");
     }
-    for (uint16_t i = 0; i < 140; i++) {
+    for (uint16_t i = 0; i < 10; i++) {
         ft_putnbr_base(i, DEC);
         PRINT(" - ");
         test(100, "small hello");
