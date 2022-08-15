@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/13 21:09:52 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/15 15:06:39 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,33 +18,25 @@ t_chunk	*g_bins[NBINS];
 void	*malloc(size_t size)
 {
 	void	*ptr;
-	size_t	status;
-	uint8_t	zone;
+	int		zone;
 
-	status = NONE;
 	size = size % 16 == 0 ? size : (size / 16 + 1) * 16;
 	if (ISLARGE(size)) {
-		ptr = create_heap(size);
-		status = STATUS_M;
-		g_zones[LARGE] = ptr;
+		ptr = new_chunk(g_zones, size + HEAD_SIZE);
 	}
 	else {
-		ptr = get_free_addr(g_bins, size);
-		if (g_zones[ISTINY(size) ? TINY : SMALL] == 0x0)
-			g_zones[ISTINY(size) ? TINY : SMALL] = ptr;
+		zone = ISTINY(size) ? TINY : SMALL;
+		if (g_zones[zone] == 0x0) {
+			g_bins[zone] = create_heap((zone == TINY ? MAX_TINY : MAX_SMALL) * 100);
+		}
+		ptr = recycle_chunk(g_bins, size + HEAD_SIZE);
+		if (g_zones[zone] == 0x0)
+			g_zones[zone] = ptr;
 		if (!ptr) {
-			ptr = create_heap(size);
-			status = STATUS_M;
+			ptr = new_chunk(g_zones, size + HEAD_SIZE);
 		}
 	}
 	if (ptr) {
-		if (status & STATUS_M)
-			zone = LARGE;
-		else if (ISTINY(size))
-			zone = TINY;
-		else
-			zone = SMALL;
-		set_inuse_chunk(ptr, size, status, g_zones[zone]);
 		ptr += HEAD_SIZE;
 	}
 	return (ptr);
@@ -54,11 +46,8 @@ void	free(void *ptr)
 {
     t_chunk *chunk = (t_chunk *)(ptr - HEAD_SIZE);
 
-    if (chunk->size & STATUS_M) {
+    if (chunk->size & S_LARGE) {
         munmap(ptr, GET_SIZE(chunk->size));
-    }
-    else if (chunk->size & STATUS_A) {
-        return ;
     }
     else {
         size_t  size = GET_SIZE(chunk->size);
@@ -84,28 +73,26 @@ void	*realloc(void *ptr, size_t size)
 void	show_alloc_mem(void)
 {
 	t_chunk		*it;
-	int			zone_size[] = {MAX_TINY, MAX_SMALL};
 	char		*zones_name[] = {"TINY", "SMALL"};
+	uint64_t	zones_flag[] = {S_TINY, S_SMALL};
 	uint64_t	total = 0;
-	size_t		size;
 
 	for (uint8_t i = 0; i < NZONES - 1; i++) {
 		it = g_zones[i];
-		size = (zone_size[i] + HEAD_SIZE) * 100;
-		size = (size / getpagesize() + 1) * getpagesize();
 		print_zone(g_zones[i], zones_name[i]);
-		while (it != 0x0 && it->size != 0) {
-			if (GET_SIZE(it->size) > 0) {
+		while (it != 0x0 && GET_STATUS(it->size) & zones_flag[i]) {
+			if (!(GET_STATUS(it->size) & S_FREE)) {
 				print_block(it);
 				total += GET_SIZE(it->size);
 			}
-			it = (void *)(it + 1) + GET_SIZE(it->size);
+			it = (void *)it + GET_SIZE(it->size);
 		}
 	}
-	print_zone(g_zones[LARGE], "LARGE");
 	it = g_zones[LARGE];
-	while (it && it->next)
+	while (it && it->next) {
 		it = it->next;
+	}
+	print_zone(it, "LARGE");
 	while (it && it->previous) {
 		print_block(it);
 		total += GET_SIZE(it->size);

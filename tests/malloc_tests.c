@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:09 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/13 21:10:09 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/15 15:04:49 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ void    test(size_t n, char *str) {
 void    test_max_malloc_by_zone()
 {
     show_alloc_mem();
-    for (uint16_t i = 0; i < 10; i++) {
+    for (uint16_t i = 0; i < 145; i++) {
         ft_putnbr_base(i, DEC);
         PRINT(" - ");
         test(13, "tiny hello");
     }
-    for (uint16_t i = 0; i < 10; i++) {
+    for (uint16_t i = 0; i < 145; i++) {
         ft_putnbr_base(i, DEC);
         PRINT(" - ");
         test(100, "small hello");
@@ -44,7 +44,29 @@ void    test_max_malloc_by_zone()
     show_alloc_mem();
 }
 
+void    test_n_malloc_by_zone(uint64_t n)
+{
+    show_alloc_mem();
+    for (uint64_t i = 0; i < n; i++) {
+        ft_putnbr_base(i, DEC);
+        PRINT(" - ");
+        test(13, "tiny hello");
+    }
+    for (uint64_t i = 0; i < n; i++) {
+        ft_putnbr_base(i, DEC);
+        PRINT(" - ");
+        test(100, "small hello");
+    }
+    for (uint64_t i = 0; i < n; i++) {
+        ft_putnbr_base(i, DEC);
+        PRINT(" - ");
+        test(1000000, "large hello");
+    }
+    show_alloc_mem();
+}
+
 void    malloc_tests(void)
 {
-    test_max_malloc_by_zone();
+    // test_max_malloc_by_zone();
+    test_n_malloc_by_zone(4);
 }
