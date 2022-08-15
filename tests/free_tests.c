@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/15 15:56:52 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/15 19:04:35 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,8 @@ void    free_tests(void)
     PRINT("# AFTER FREE:\n");
     show_alloc_mem();
     free(NULL);
+    PRINT("\n");
+
+    ptr = strdup("");
+    show_alloc_mem();
 }

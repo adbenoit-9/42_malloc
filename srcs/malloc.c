@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/15 16:03:51 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/15 19:03:41 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,13 @@ void	*malloc(size_t size)
 
 void	free(void *ptr)
 {
-    t_chunk *chunk = (t_chunk *)(ptr - HEAD_SIZE);
-	uint8_t	zone;
+	t_chunk *chunk;
+	uint8_t zone;
 
-    if (chunk->size & S_LARGE) {
+	if (!ptr)
+		return ;
+	chunk = (t_chunk *)(ptr - HEAD_SIZE);
+	if (chunk->size & S_LARGE) {
 		if (chunk->next) {
 			chunk->next->previous = chunk->previous;
 			chunk->next->prev_size = chunk->prev_size;
@@ -57,17 +60,17 @@ void	free(void *ptr)
 			chunk->previous->next = chunk->next;
 		else
 			g_zones[LARGE] = chunk->next;
-        munmap(chunk, GET_SIZE(chunk->size));
-    }
-    else {
-        size_t  size = GET_SIZE(chunk->size);
-        ft_bzero(chunk + HEAD_SIZE, size - HEAD_SIZE);
-        chunk->size |= S_FREE;
+		munmap(chunk, GET_SIZE(chunk->size));
+	}
+	else {
+		size_t  size = GET_SIZE(chunk->size);
+		ft_bzero(chunk + HEAD_SIZE, size - HEAD_SIZE);
+		chunk->size |= S_FREE;
 		zone = chunk->size & S_TINY ? TINY : SMALL;
 		chunk->next = g_bins[zone];
 		g_bins[zone] = chunk;
 		chunk->next->previous = chunk;
-    }
+	}
 }
 
 void	*realloc(void *ptr, size_t size)
