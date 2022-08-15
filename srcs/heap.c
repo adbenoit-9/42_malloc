@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/15 15:27:21 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/15 15:58:50 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
             free_chunk->next->previous = free_chunk->previous;
         newptr = free_chunk->next;
         free_chunk->size = free_chunk->size | status;
+        free_chunk->size &= ~S_FREE;
     }
     /* get a part of the free chunk */
     else {
