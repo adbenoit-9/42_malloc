@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 16:12:42 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 13:45:43 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:58:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 t_cmd	*g_cmd;
 t_shell	g_shell;
@@ -22,7 +22,7 @@ int		g_quote;
 void		init_mshell(void)
 {
 	g_shell.pid = 0;
-	g_shell.bool = 0;
+	g_shell.b = 0;
 	g_quote = 0;
 }
 
@@ -79,7 +79,7 @@ static int	launch_mshell(char *str, int n, char **envp[], int ret)
 	i = 0;
 	g_cmd = NULL;
 	if (ret == 0)
-		g_shell.bool = 0;
+		g_shell.b = 0;
 	if (!*envp)
 	{
 		errno_msg("envp", NULL, MALL_ERR);

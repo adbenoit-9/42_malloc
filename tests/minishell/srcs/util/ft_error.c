@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/14 17:02:12 by adbenoit          #+#    #+#             */
-/*   Updated: 2020/12/31 01:53:23 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:58:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 int	error_msg(char *cmd, char *arg, char *err, int error)
 {

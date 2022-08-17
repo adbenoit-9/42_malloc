@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/02 22:32:33 by adbenoit          #+#    #+#             */
-/*   Updated: 2021/01/04 18:20:59 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:58:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 static int	special_char(char c, char *tokens, int *j, int len)
 {

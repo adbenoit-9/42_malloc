@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/14 17:16:21 by adbenoit          #+#    #+#             */
-/*   Updated: 2020/12/31 00:15:50 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:58:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 static int	parse_char(char *token, t_list **new, int *k, char *envp[])
 {

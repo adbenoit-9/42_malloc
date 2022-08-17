@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/15 15:24:02 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:09:28 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/resource.h>
 
 # define PRINT(s) write(STDIN_FILENO, s, strlen(s))
-# define NONE 0
+// # define NONE 0
 # define HEXA "0123456789ABCDEF"
 # define DEC "0123456789"
 # define LONG_INT(ptr) (int64_t)ptr

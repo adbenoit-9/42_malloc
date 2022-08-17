@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/18 14:41:09 by adbenoit          #+#    #+#             */
-/*   Updated: 2020/12/21 18:54:52 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:58:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 int	set_sep(char *str, int *i)
 {

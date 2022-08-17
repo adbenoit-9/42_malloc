@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/10 00:45:42 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 13:45:05 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 15:04:00 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@
 # define VAR_NOT_FOUND -1
 
 # include <unistd.h>
-# include <stdlib.h>
+// # include <stdlib.h>
+# include "malloc.h"
 # include <stdio.h>
 # include <sys/errno.h>
 # include <sys/types.h>
@@ -59,7 +60,7 @@ extern int	g_quote;
 typedef struct	s_shell
 {
 	pid_t		pid;
-	int			bool;
+	int			b;
 	int			sig;
 	char		*pwd;
 }				t_shell;

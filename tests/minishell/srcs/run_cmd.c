@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/22 16:24:24 by adbenoit          #+#    #+#             */
-/*   Updated: 2020/12/30 19:46:12 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:58:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 int	run_cmd(t_cmd *cmd, int *fd, int pid, char **envp[])
 {

@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:40:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2020/12/23 21:43:29 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:58:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 int		ft_redirect(t_cmd *cmd, int *fd_in, int *fd_out)
 {

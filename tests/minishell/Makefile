@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/25 23:32:24 by adbenoit          #+#    #+#              #
-#    Updated: 2021/01/08 14:24:48 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/17 15:01:35 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ UTIL_PATH 	=	srcs/util/
 BUILTIN_PATH=	srcs/builtin/
 PARS_PATH 	=	srcs/parsing/
 
-SRCS		=	main.c				run_cmd.c \
+TMP		=	main.c				run_cmd.c \
 				redirect.c			fork_handle.c \
 				signal.c			exec_cmd.c \
 				ft_shlvl.c
@@ -43,61 +43,34 @@ CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror
 
 LIB_DIR		=	libft
-
 LIB			=	$(LIB_DIR)/libft.a
+MALLOC		=	"../../libft_malloc.so"
 
-OBJ_PATH	=	obj/
-
-OBJS_NAME	=	$(SRCS:.c=.o)
-OBJS_NAME	+=	$(UTIL:.c=.o)
-OBJS_NAME	+=	$(BUILTIN:.c=.o)
-OBJS_NAME	+=	$(PARS:.c=.o)
-
-OBJS		=	$(addprefix $(OBJ_PATH),$(OBJS_NAME))
+SRCS		=	$(addprefix $(SRCS_PATH),$(TMP))
+SRCS		+=	$(addprefix $(UTIL_PATH),$(UTIL))
+SRCS		+=	$(addprefix $(BUILTIN_PATH),$(BUILTIN))
+SRCS		+=	$(addprefix $(PARS_PATH),$(PARS))
 
 all: $(LIB) $(NAME)
-	@cat minishell.txt
 
 $(LIB) :
-	@make -C $(LIB_DIR)
+	@make -C $(LIB_DIR) > /dev/null
 
-$(NAME) : $(OBJS)
+$(NAME) : $(LIB)
 	@printf "\n"
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB)
+	@$(CC) $(CFLAGS) $(MALLOC) $(SRCS) $(LIB) -o $(NAME) 
 	@echo "Compilation of \033[33;1m$(NAME)\033[0;1m: [\033[1;32mOK\033[0;1m]\033[0m"
-
-$(OBJ_PATH)%.o:	$(UTIL_PATH)%.c $(HEADER)
-	@printf "\033[34;1m|\033[0;m"
-	@mkdir $(OBJ_PATH) 2> /dev/null || true
-	@$(CC) $(CFLAGS) -I$(INC) -c $< -o $@
-
-$(OBJ_PATH)%.o:	$(SRCS_PATH)%.c $(HEADER)
-	@printf "\033[34;1m|\033[0;m"
-	@mkdir $(OBJ_PATH) 2> /dev/null || true
-	@$(CC) $(CFLAGS) -I$(INC) -c $< -o $@
-
-$(OBJ_PATH)%.o:	$(BUILTIN_PATH)%.c $(HEADER)
-	@printf "\033[34;1m|\033[0;m"
-	@mkdir $(OBJ_PATH) 2> /dev/null || true
-	@$(CC) $(CFLAGS) -I$(INC) -c $< -o $@
-
-$(OBJ_PATH)%.o:	$(PARS_PATH)%.c $(HEADER)
-	@printf "\033[34;1m|\033[0;m"
-	@mkdir $(OBJ_PATH) 2> /dev/null || true
-	@$(CC) $(CFLAGS) -I$(INC) -c $< -o $@
 
 run: all
 	@./$(NAME)
 
 clean:
-	@rm -f $(OBJ)
-	@rm -rf $(OBJ_PATH)
-	@make -C $(LIB_DIR) clean
+	@make -C $(LIB_DIR) clean > /dev/null
 	@echo "\033[33;1m$(NAME)\033[0;1m: objects deleted\033[0m"
 
 fclean:	clean
-	@rm -rf $(NAME)
-	@make -C $(LIB_DIR) fclean
+	@rm -Rf $(NAME)
+	@make -C $(LIB_DIR) fclean > /dev/null
 	@echo "\033[33;1m$(NAME)\033[0;1m: $(NAME) deleted\033[0m"
 
 re: fclean all

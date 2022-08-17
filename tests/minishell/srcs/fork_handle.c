@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 00:53:45 by adbenoit          #+#    #+#             */
-/*   Updated: 2021/01/05 16:02:37 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:58:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 void		modify_fd(t_cmd *cmd, int *fd)
 {
@@ -23,7 +23,7 @@ void		modify_fd(t_cmd *cmd, int *fd)
 static void	ft_son(t_cmd *cmd, int *fd, int *p, char **envp[])
 {
 	g_shell.pid = 1;
-	g_shell.bool = 0;
+	g_shell.b = 0;
 	dup2(fd[0], 0);
 	if (cmd->next)
 		dup2(p[1], 1);

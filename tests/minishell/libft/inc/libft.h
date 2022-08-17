@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 20:16:25 by adbenoit          #+#    #+#             */
-/*   Updated: 2021/01/08 14:01:31 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:05:20 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include "get_next_line.h"
-# include "ft_printf.h"
 
 typedef struct	s_list
 {
