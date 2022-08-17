@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 13:37:16 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 15:54:42 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ void	*malloc(size_t size)
 	void	*ptr;
 	int		zone;
 
+	PRINT("in malloc\n");
 	size = size % 16 == 0 ? size : (size / 16 + 1) * 16;
 	if (ISLARGE(size)) {
 		ptr = new_chunk(g_zones, size + HEAD_SIZE);
+		PRINT("failed1\n");
 	}
 	else {
 		zone = ISTINY(size) ? TINY : SMALL;
@@ -34,11 +36,14 @@ void	*malloc(size_t size)
 			g_zones[zone] = ptr;
 		if (!ptr) {
 			ptr = new_chunk(g_zones, size + HEAD_SIZE);
+			PRINT("failed2\n");
 		}
 	}
+	print_chunk(ptr);
 	if (ptr) {
 		ptr += HEAD_SIZE;
 	}
+	PRINT("chunk create\n");
 	return (ptr);
 }
 
@@ -47,9 +52,13 @@ void	free(void *ptr)
 	t_chunk *chunk;
 	uint8_t zone;
 
+	PRINT("in free\n");
+	ft_putnbr_base(LONG_INT(ptr), HEXA);
+	PRINT("\n");
 	if (!ptr)
 		return ;
 	chunk = (t_chunk *)(ptr - HEAD_SIZE);
+	print_chunk(chunk);
 	if (chunk->size & S_LARGE) {
 		if (chunk->next) {
 			chunk->next->previous = chunk->previous;
@@ -63,13 +72,17 @@ void	free(void *ptr)
 		munmap(chunk, GET_SIZE(chunk->size));
 	}
 	else {
+		PRINT("not in large zone\n");
 		size_t  size = GET_SIZE(chunk->size);
+		print_chunk(chunk);
 		ft_bzero(chunk + HEAD_SIZE, size - HEAD_SIZE);
 		chunk->size |= S_FREE;
 		zone = chunk->size & S_TINY ? TINY : SMALL;
 		chunk->next = g_bins[zone];
 		g_bins[zone] = chunk;
-		chunk->next->previous = chunk;
+		if (chunk->next)
+			chunk->next->previous = chunk;
+		PRINT("freed\n");
 	}
 }
 
