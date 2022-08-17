@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 18:02:43 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 18:56:29 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,4 +148,46 @@ void	show_alloc_mem(void)
 	ft_putnbr_base(total, DEC);
 	PRINT("\n");
 	pthread_mutex_unlock(&g_large_mutex);
+}
+
+void	show_alloc_mem_ex()
+{
+	pthread_mutex_lock(&g_large_mutex);
+	t_chunk		*it;
+	t_chunk		*zones[] = {g_tiny_zone, g_small_zone};
+	char		*zones_name[] = {"TINY", "SMALL"};
+	uint64_t	zones_flag[] = {S_TINY, S_SMALL};
+	uint64_t	total = 0;
+
+	for (uint8_t i = 0; i < NZONES - 1; i++) {
+		it = zones[i];
+		print_zone(zones[i], zones_name[i]);
+		while (it != 0x0 && GET_STATUS(it->size) & zones_flag[i]) {
+			if (!(GET_STATUS(it->size) & S_FREE)) {
+				hexa_dump((char *)(it + 1), GET_SIZE(it->size) - HEAD_SIZE);
+				total += GET_SIZE(it->size) - HEAD_SIZE;
+			}
+			it = (void *)it + GET_SIZE(it->size);
+		}
+	}
+	return ;
+	it = g_large_zone;
+	while (it && it->next) {
+		it = it->next;
+	}
+	print_zone(it, "LARGE");
+	while (it) {
+		print_block(it);
+		for (size_t i = 0; i < GET_SIZE(it->size) - HEAD_SIZE; i++) {
+			ft_putnbr_base(*((char *)(it + 1) + i), HEXA);
+		}
+		PRINT("\n");
+		total += GET_SIZE(it->size);
+		it = it->previous;
+	}
+	PRINT("Total : ");
+	ft_putnbr_base(total, DEC);
+	PRINT("\n");
+	pthread_mutex_unlock(&g_large_mutex);
+	
 }

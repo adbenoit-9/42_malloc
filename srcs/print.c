@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:14:29 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/15 15:26:32 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 19:03:29 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,26 @@ void	print_block(t_chunk *block)
 	PRINT(" : ");
 	ft_putnbr_base(GET_SIZE(block->size) - HEAD_SIZE, DEC);
 	PRINT(" bytes\n");
+}
+
+void	hexa_dump(char *ptr, size_t size)
+{
+	PRINT("0x");
+	ft_putnbr_base(LONG_INT(ptr), HEXA);
+	PRINT("  ");
+	for (size_t i = 0; i < size; i++) {
+		if (*(ptr + i) == 0)
+			PRINT("00");
+		else
+			ft_putnbr_base(*(ptr + i), HEXA);
+		PRINT(" ");
+	}
+	PRINT("|");
+	for (size_t i = 0; i < size; i++) {
+		if (ptr[i])
+			write(STDOUT_FILENO, &ptr[i], 1);
+		else
+			write(STDOUT_FILENO, ".", 1);
+	}
+	PRINT("|\n");
 }

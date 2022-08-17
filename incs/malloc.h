@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 17:41:32 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 18:56:37 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@
 # define TINY 0
 # define SMALL 1
 # define LARGE 2
-# define MAX_TINY 4096 + HEAD_SIZE
-# define MAX_SMALL 40960 + HEAD_SIZE
+# define MAX_TINY 100000 + HEAD_SIZE
+# define MAX_SMALL 10000000 + HEAD_SIZE
 # define ISTINY(size) (size <= MAX_TINY)
 # define ISSMALL(size) (size > MAX_TINY && size <= MAX_SMALL)
 # define ISLARGE(size) (size > MAX_SMALL)
@@ -76,5 +76,7 @@ void	print_zone(t_chunk *addr, char *name);
 void    print_chunk(t_chunk *chunk);
 void    *create_heap(size_t size);
 void    set_free_chunk(t_chunk *chunk, size_t size, t_chunk *next, t_chunk *prev);
+void	hexa_dump(char *ptr, size_t size);
+void	show_alloc_mem_ex();
 
 #endif
