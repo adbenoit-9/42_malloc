@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/25 23:32:24 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/17 15:01:35 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/17 15:11:56 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,8 @@ CFLAGS		=	-Wall -Wextra -Werror
 
 LIB_DIR		=	libft
 LIB			=	$(LIB_DIR)/libft.a
-MALLOC		=	"../../libft_malloc.so"
+MALLOC_DIR	=	../..
+MALLOC		=	$(MALLOC_DIR)/libft_malloc.so
 
 SRCS		=	$(addprefix $(SRCS_PATH),$(TMP))
 SRCS		+=	$(addprefix $(UTIL_PATH),$(UTIL))
@@ -58,7 +59,7 @@ $(LIB) :
 
 $(NAME) : $(LIB)
 	@printf "\n"
-	@$(CC) $(CFLAGS) $(MALLOC) $(SRCS) $(LIB) -o $(NAME) 
+	@$(CC) $(CFLAGS) -I$(MALLOC_DIR)/incs $(SRCS) $(MALLOC) $(LIB) -o $(NAME) 
 	@echo "Compilation of \033[33;1m$(NAME)\033[0;1m: [\033[1;32mOK\033[0;1m]\033[0m"
 
 run: all

@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/22 16:45:38 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 15:00:52 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 15:06:18 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void	ft_putexp_fd(t_list *ptr, int fd, char *envp[])
 		i = -1;
 		while (copy[++i])
 		{
-			// show_alloc_mem();
+			show_alloc_mem();
 			get_var_name(var, copy[i]);
 			len = ft_strlen(var);
 			ft_putstr_fd("declare -x ", fd);
