@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_tests.c                                       :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adbenoit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 13:41:25 by adbenoit         ###   ########.fr       */
+/*   Created: 2019/11/07 19:17:19 by adbenoit          #+#    #+#             */
+/*   Updated: 2019/11/11 14:12:26 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tests.h"
+#include "libft.h"
 
-void    free_tests(void)
+void	ft_putchar_fd(char c, int fd)
 {
-    
+	write(fd, &c, 1);
 }

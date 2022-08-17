@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_tests.c                                       :+:      :+:    :+:   */
+/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adbenoit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 13:41:25 by adbenoit         ###   ########.fr       */
+/*   Created: 2019/11/11 17:49:10 by adbenoit          #+#    #+#             */
+/*   Updated: 2019/11/14 16:13:50 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tests.h"
+#include "libft.h"
 
-void    free_tests(void)
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
-    
+	if (del && lst)
+	{
+		(*del)(lst->content);
+		free(lst);
+	}
 }

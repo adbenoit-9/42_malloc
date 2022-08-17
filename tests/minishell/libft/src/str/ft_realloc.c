@@ -1,18 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_tests.c                                       :+:      :+:    :+:   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 13:41:25 by adbenoit         ###   ########.fr       */
+/*   Created: 2020/05/29 16:41:55 by adbenoit          #+#    #+#             */
+/*   Updated: 2021/01/06 01:37:07 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tests.h"
+#include "libft.h"
 
-void    free_tests(void)
+char	*ft_realloc(char *ptr, size_t newsize)
 {
-    
+	char	*newptr;
+	size_t	size;
+
+	if (ptr == 0)
+		return (malloc(newsize));
+	size = ft_strlen((char *)ptr);
+	if (newsize <= size)
+		return (ptr);
+	newptr = malloc(newsize);
+	ft_memcpy(newptr, ptr, size);
+	free(ptr);
+	ptr = NULL;
+	return (newptr);
 }

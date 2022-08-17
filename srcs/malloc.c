@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/15 19:03:41 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 13:37:16 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	show_alloc_mem(void)
 		while (it != 0x0 && GET_STATUS(it->size) & zones_flag[i]) {
 			if (!(GET_STATUS(it->size) & S_FREE)) {
 				print_block(it);
-				total += GET_SIZE(it->size);
+				total += GET_SIZE(it->size) - HEAD_SIZE;
 			}
 			it = (void *)it + GET_SIZE(it->size);
 		}

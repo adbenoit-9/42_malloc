@@ -1,18 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_tests.c                                       :+:      :+:    :+:   */
+/*   print_c.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 13:41:25 by adbenoit         ###   ########.fr       */
+/*   Created: 2019/11/07 19:17:19 by adbenoit          #+#    #+#             */
+/*   Updated: 2021/01/07 10:02:32 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tests.h"
+#include "libft.h"
 
-void    free_tests(void)
+int		print_char(char c)
 {
-    
+	write(1, &c, 1);
+	return (1);
+}
+
+size_t	print_c(char c, t_arg *format, size_t ret)
+{
+	if (format && format->flag != '-')
+		ret += print_space(format, 1);
+	ret += print_char(c);
+	ret += print_space(format, 1);
+	return (ret);
 }

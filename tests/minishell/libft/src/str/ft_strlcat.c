@@ -1,18 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_tests.c                                       :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 13:41:25 by adbenoit         ###   ########.fr       */
+/*   Created: 2019/09/04 11:20:36 by adbenoit          #+#    #+#             */
+/*   Updated: 2021/01/06 01:53:27 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tests.h"
+#include "libft.h"
 
-void    free_tests(void)
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
-    
+	size_t	i;
+	size_t	j;
+	size_t	k;
+	size_t	l;
+
+	i = ft_strlen(dst);
+	k = i;
+	l = ft_strlen(src);
+	j = 0;
+	while (src[j] && i < dstsize - 1 && dstsize)
+		dst[i++] = src[j++];
+	if (dstsize > k)
+	{
+		dst[i] = 0;
+		return (l + k);
+	}
+	else
+		return (l + dstsize);
 }

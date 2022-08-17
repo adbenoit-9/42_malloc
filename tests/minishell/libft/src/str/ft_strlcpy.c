@@ -1,18 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_tests.c                                       :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 13:41:25 by adbenoit         ###   ########.fr       */
+/*   Created: 2019/09/03 16:40:57 by adbenoit          #+#    #+#             */
+/*   Updated: 2021/01/06 01:58:43 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tests.h"
+#include "libft.h"
 
-void    free_tests(void)
+size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
 {
-    
+	size_t i;
+	size_t j;
+
+	j = 0;
+	while (src[j] != 0)
+		++j;
+	i = 0;
+	if (dstsize == 0)
+		return (j);
+	while (i < dstsize - 1 && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		++i;
+	}
+	if (dstsize > 0)
+		dest[i] = '\0';
+	return (j);
 }

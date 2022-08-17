@@ -1,18 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_tests.c                                       :+:      :+:    :+:   */
+/*   ft_tabdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 13:41:25 by adbenoit         ###   ########.fr       */
+/*   Created: 2021/01/06 01:26:19 by adbenoit          #+#    #+#             */
+/*   Updated: 2021/01/06 02:04:35 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tests.h"
+#include "libft.h"
 
-void    free_tests(void)
+char	**ft_tabdup(char *tab[])
 {
-    
+	char	**copy;
+	size_t	size;
+	size_t	i;
+
+	copy = NULL;
+	size = 0;
+	i = 0;
+	size = ft_tabsize(tab);
+	if (!(copy = malloc(sizeof(char *) * (size + 1))))
+		return (NULL);
+	while (i < size)
+	{
+		if (!(copy[i] = ft_strdup(tab[i])))
+		{
+			ft_freetab(copy);
+			return (NULL);
+		}
+		++i;
+	}
+	copy[i] = NULL;
+	return (copy);
 }
