@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 17:42:28 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 19:44:33 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void    *create_heap(size_t size)
 	size = (size % getpagesize() == 0) ? size : \
         (size / getpagesize() + 1) * getpagesize();
     // check limit of mem getrlimit() ?
-	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED\
+	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE\
 		| MAP_ANON, -1, 0);
 	if (errno)
 		return (0x0);

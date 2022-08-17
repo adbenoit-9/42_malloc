@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 18:56:29 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 19:48:21 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,19 +170,13 @@ void	show_alloc_mem_ex()
 			it = (void *)it + GET_SIZE(it->size);
 		}
 	}
-	return ;
 	it = g_large_zone;
 	while (it && it->next) {
 		it = it->next;
 	}
 	print_zone(it, "LARGE");
 	while (it) {
-		print_block(it);
-		for (size_t i = 0; i < GET_SIZE(it->size) - HEAD_SIZE; i++) {
-			ft_putnbr_base(*((char *)(it + 1) + i), HEXA);
-		}
-		PRINT("\n");
-		total += GET_SIZE(it->size);
+		hexa_dump((char *)(it + 1), GET_SIZE(it->size) - HEAD_SIZE);
 		it = it->previous;
 	}
 	PRINT("Total : ");
