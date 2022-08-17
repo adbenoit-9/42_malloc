@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 16:01:49 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 17:42:28 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,16 @@ void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
     return (newptr);
 }
 
-void    *recycle_chunk(t_chunk **bins, size_t size)
+void    *recycle_chunk(t_chunk **bin, size_t size)
 {
     uint8_t     zone = ISTINY(size) ? TINY : SMALL;
     t_chunk     *free_chunk, *ptr;
 
-    if ((zone == SMALL && !ISSMALL(size)) || !bins[zone]) {
+    if ((zone == SMALL && !ISSMALL(size)) || !*bin) {
         return (NULL);
     }
     /* get a free zone to use */
-    ptr = bins[zone];
+    ptr = *bin;
     while (ptr->next && GET_SIZE(ptr->size) < size) {
         ptr = ptr->next;
     }
@@ -83,11 +83,11 @@ void    *recycle_chunk(t_chunk **bins, size_t size)
     }
     free_chunk = use_free_chunk(ptr, size, zone == TINY ? S_TINY : S_SMALL);
     if (!free_chunk || !free_chunk->previous)
-        bins[zone] = free_chunk;
+        *bin = free_chunk;
     return (ptr);
 }
 
-void    *new_chunk(t_chunk **zones, size_t size)
+void    *new_chunk(size_t size, t_chunk *next)
 {
     t_chunk *chunk;
 
@@ -97,12 +97,11 @@ void    *new_chunk(t_chunk **zones, size_t size)
     }
     chunk->size &= ~S_FREE;
     chunk->size |= S_LARGE;
-    if (zones[LARGE]) {
-        chunk->next = zones[LARGE];
-        chunk->prev_size = zones[LARGE]->size;
-        zones[LARGE]->previous = chunk;
-        zones[LARGE]->prev_size = chunk->size;
+    if (next) {
+        chunk->next = next;
+        chunk->prev_size = next->size;
+        next->previous = chunk;
+        next->prev_size = chunk->size;
     }
-    zones[LARGE] = chunk;
     return (chunk);
 }

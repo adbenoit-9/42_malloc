@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 14:09:28 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/17 17:41:32 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdint.h>
 # include <sys/time.h> 
 # include <sys/resource.h>
+# include <pthread.h>
 
 # define PRINT(s) write(STDIN_FILENO, s, strlen(s))
 // # define NONE 0
@@ -44,8 +45,8 @@
 # define TINY 0
 # define SMALL 1
 # define LARGE 2
-# define MAX_TINY 21 + HEAD_SIZE
-# define MAX_SMALL 65536 + HEAD_SIZE
+# define MAX_TINY 4096 + HEAD_SIZE
+# define MAX_SMALL 40960 + HEAD_SIZE
 # define ISTINY(size) (size <= MAX_TINY)
 # define ISSMALL(size) (size > MAX_TINY && size <= MAX_SMALL)
 # define ISLARGE(size) (size > MAX_SMALL)
@@ -69,7 +70,7 @@ void	show_alloc_mem(void);
 void	ft_putnbr_base(int64_t n, char *base);
 void	ft_bzero(void *s, size_t n);
 void    *recycle_chunk(t_chunk **bins, size_t size);
-void    *new_chunk(t_chunk **zones, size_t size);
+void    *new_chunk(size_t size, t_chunk *next);
 void	print_block(t_chunk *block);
 void	print_zone(t_chunk *addr, char *name);
 void    print_chunk(t_chunk *chunk);
