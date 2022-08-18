@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 16:03:34 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 17:09:09 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,15 @@
 
 # define ZONE_SIZE(max) (((HEAD_SIZE + max) * 100 / getsizepage() +\
 		(size % getpagesize() == 0)) * getsizepage())
+        
+#define LITTLE_MALLOC(zone, bin, zone_size) do {\
+        if (zone == 0x0) {\
+            bin = create_heap(zone_size * 100);\
+        }\
+		ptr = recycle_chunk(&bin, size);\
+		if (zone == 0x0)\
+			zone = ptr;\
+} while (0);
 
 /*
 ** Chunk

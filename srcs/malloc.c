@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 16:46:19 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 17:09:01 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,10 @@ void	*malloc(size_t size)
 	if (pthread_mutex_lock(&g_mutex))
 		return (NULL);
 	if (ISTINY(size)) {
-		if (g_tiny_zone == 0x0) {
-			g_tiny_bin = create_heap(MAX_TINY * 100);
-		}
-		ptr = recycle_chunk(&g_tiny_bin, size);
-		if (g_tiny_zone == 0x0)
-			g_tiny_zone = ptr;
+		LITTLE_MALLOC(g_tiny_zone, g_tiny_bin, MAX_TINY);
 	}
 	else if (ISSMALL(size)) {
-		if (g_small_zone == 0x0) {
-			g_small_bin = create_heap(MAX_SMALL * 100);
-		}
-		ptr = recycle_chunk(&g_small_bin, size);
-		if (g_small_zone == 0x0)
-			g_small_zone = ptr;
+		LITTLE_MALLOC(g_small_zone, g_small_bin, MAX_SMALL);
 	}
 	if (!ptr) {
 		ptr = new_chunk(size, g_large_zone);
