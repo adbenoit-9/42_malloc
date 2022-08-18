@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 17:09:09 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 17:13:37 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 		ptr = recycle_chunk(&bin, size);\
 		if (zone == 0x0)\
 			zone = ptr;\
-} while (0);
+    } while (0);
 
 /*
 ** Chunk

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heap.c                                             :+:      :+:    :+:   */
+/*   write_heap.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 16:12:08 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 17:37:47 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void    *create_heap(size_t size)
 	size = (size % getpagesize() == 0) ? size : \
         (size / getpagesize() + 1) * getpagesize();
     // check limit of mem getrlimit() ?
-	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE\
-		| MAP_ANON, -1, 0);
+	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
     if (ptr) {
         ft_bzero(ptr, size);
         ((t_chunk *)ptr)->size = size | S_FREE;
@@ -103,4 +102,30 @@ void    *new_chunk(size_t size, t_chunk *next)
         next->prev_size = chunk->size;
     }
     return (chunk);
+}
+
+void    free_chunk(t_chunk *chunk, t_chunk *next)
+{
+    size_t  size = GET_SIZE(chunk->size);
+    ft_bzero(chunk + 1, size - HEAD_SIZE);
+    chunk->size |= S_FREE;
+    chunk->next = next;
+    if (chunk->next)
+        chunk->next->previous = chunk;   
+}
+
+void    *delete_chunk(t_chunk *chunk)
+{
+    void    *ptr = NULL;
+
+    if (chunk->next) {
+        chunk->next->previous = chunk->previous;
+        chunk->next->prev_size = chunk->prev_size;
+    }
+    if (chunk->previous)
+        chunk->previous->next = chunk->next;
+    else
+        ptr = chunk->next;
+    munmap(chunk, GET_SIZE(chunk->size));
+    return (ptr);
 }

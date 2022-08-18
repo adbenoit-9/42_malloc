@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:09 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 14:11:21 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 17:32:17 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,26 +48,28 @@ void    test_max_malloc_by_zone()
 
 void    test_n_malloc_by_zone(uint64_t n)
 {
-    void    *ptr;
+    void    *ptr[n];
+    
     show_alloc_mem();
     for (uint64_t i = 0; i < n; i++) {
         ft_putnbr_base(i, DEC);
         PRINT(" - ");
-        ptr = test(13, "tiny hello");
+        ptr[i] = test(13, "tiny hello");
     }
     for (uint64_t i = 0; i < n; i++) {
         ft_putnbr_base(i, DEC);
         PRINT(" - ");
-        ptr = test(100, "small hello");
-    }
-    free(ptr);
-    free(ptr);
-    for (uint64_t i = 0; i < n; i++) {
-        ft_putnbr_base(i, DEC);
-        PRINT(" - ");
-        ptr = test(1000000, "large hello");
+        ptr[i] = test(100, "small hello");
     }
     show_alloc_mem();
+    free(ptr[0]);
+    for (uint64_t i = 0; i < n; i++) {
+        ft_putnbr_base(i, DEC);
+        PRINT(" - ");
+        ptr[i] = test(1000000, "large hello");
+    }
+    show_alloc_mem();
+    free(ptr[0]);
     show_alloc_mem();
     // show_alloc_mem_ex();
 }

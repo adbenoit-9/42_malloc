@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 17:09:01 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 17:40:50 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,13 @@ void	*malloc(size_t size)
 	else if (ISSMALL(size)) {
 		LITTLE_MALLOC(g_small_zone, g_small_bin, MAX_SMALL);
 	}
-	if (!ptr) {
+	if (!ptr)
 		ptr = new_chunk(size, g_large_zone);
-	}
-	if (ptr && ((t_chunk *)ptr)->size & S_LARGE) {
+	if (ptr && ((t_chunk *)ptr)->size & S_LARGE)
 		g_large_zone = ptr;
-	}
 	pthread_mutex_unlock(&g_mutex);
-	if (ptr) {
+	if (ptr)
 		ptr += HEAD_SIZE;
-	}
 	return (ptr);
 }
 
@@ -54,30 +51,17 @@ void	free(void *ptr)
 		kill(0, SIGABRT);
 	}
 	if (chunk->size & S_LARGE) {
-		if (chunk->next) {
-			chunk->next->previous = chunk->previous;
-			chunk->next->prev_size = chunk->prev_size;
-		}
-		if (chunk->previous)
-			chunk->previous->next = chunk->next;
-		else
-			g_large_zone = chunk->next;
-		munmap(chunk, GET_SIZE(chunk->size));
+		chunk = delete_chunk(chunk);
+		if (chunk)
+			g_large_zone = chunk;
+	}
+	else if (chunk->size & S_TINY) {
+		free_chunk(chunk, g_tiny_bin);
+		g_tiny_bin = chunk;
 	}
 	else {
-		size_t  size = GET_SIZE(chunk->size);
-		ft_bzero(ptr, size - HEAD_SIZE);
-		chunk->size |= S_FREE;
-		if (chunk->size & S_TINY) {
-			chunk->next = g_tiny_zone;
-			g_tiny_zone = chunk;
-		}
-		else {
-			chunk->next = g_small_zone;
-			g_small_zone = chunk;
-		}
-		if (chunk->next)
-			chunk->next->previous = chunk;
+		free_chunk(chunk, g_small_bin);
+		g_small_bin = chunk;
 	}
 	pthread_mutex_unlock(&g_mutex);
 }
