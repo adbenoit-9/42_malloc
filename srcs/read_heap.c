@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:14:29 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 16:42:27 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 19:24:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@ void    print_chunk(t_chunk *chunk)
 	PRINT(" chunk --\n");
 	PRINT("prev_size : ");
 	ft_putnbr_base(GET_SIZE(chunk->prev_size), DEC);
-	PRINT(" bytes\nsize : ");
+	PRINT(" bytes | status : ");
+	ft_putnbr_base(GET_STATUS(chunk->prev_size), DEC);
+	PRINT("\nsize : ");
 	ft_putnbr_base(GET_SIZE(chunk->size), DEC);
 	PRINT(" bytes\nprevious : 0x");
 	ft_putnbr_base(LONG_INT(chunk->previous), HEXA);
 	PRINT("\nnext : 0x");
 	ft_putnbr_base(LONG_INT(chunk->next), HEXA);
-	PRINT(" bytes\n-----------\n");
+	PRINT("\n-----------\n");
 }
 
 void	print_block(t_chunk *block)

@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 17:13:37 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 19:41:42 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@
 # define S_SMALL 0b0100
 # define S_LARGE 0b0010
 # define S_FREE 0b0001
+# define GET_STATUS(n) (n & (S_LARGE | S_SMALL | S_TINY))
 
 /* size */
 # define GET_SIZE(n) (n & ~(S_TINY | S_SMALL | S_LARGE | S_FREE))
@@ -76,5 +77,7 @@ typedef struct	s_chunk
 	struct s_chunk	*previous;		/* pointer to previous chunk in list */
 	struct s_chunk	*next;			/* pointer to next chunk in list */
 }				t_chunk;
+
+void    	print_chunk(t_chunk *chunk);
 
 #endif

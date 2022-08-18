@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 17:37:47 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 19:46:33 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
     t_chunk *newptr;
     
     /* delete free chunk */
-    if (GET_SIZE(free_chunk->size) < size + HEAD_SIZE) {
+    if (GET_SIZE(free_chunk->size) == size) {
         if (free_chunk->previous)
             free_chunk->previous->next = free_chunk->next;
         if (free_chunk->next)
@@ -60,6 +60,32 @@ void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
     free_chunk->next = 0;
     free_chunk->previous = 0;
     return (newptr);
+}
+ 
+void    *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin)
+{
+    t_chunk *free_part;
+    t_chunk tmp;
+    int64_t  add_size;
+    
+    add_size = size - GET_SIZE(chunk->size);
+    if (GET_STATUS(chunk->size) & S_LARGE)
+        return (NULL);
+    if (add_size <= 0)
+        return (chunk);
+    free_part = (void *)(chunk + 1) + chunk->size;
+    if (!(free_part->size & S_FREE))
+        return (NULL);
+    tmp = *free_part;
+    tmp.size -= add_size;
+    tmp.prev_size = size | GET_STATUS(chunk->size);
+    memcpy((void *)chunk + size, &tmp, sizeof(tmp));
+    if (tmp.previous)
+        tmp.previous->next = (void *)chunk + size;
+    else
+        *bin = (void *)chunk + size;
+    chunk->size = size | GET_STATUS(chunk->size);
+    return (chunk);
 }
 
 /* Get a free zone pre-allocate on the heap */
@@ -107,6 +133,7 @@ void    *new_chunk(size_t size, t_chunk *next)
 void    free_chunk(t_chunk *chunk, t_chunk *next)
 {
     size_t  size = GET_SIZE(chunk->size);
+
     ft_bzero(chunk + 1, size - HEAD_SIZE);
     chunk->size |= S_FREE;
     chunk->next = next;

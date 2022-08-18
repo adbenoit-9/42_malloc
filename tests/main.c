@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 19:15:40 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 16:40:29 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 17:49:12 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int main(void)
 {
-    malloc_tests();
-    // realloc_tests();
+    realloc_tests();
+    // malloc_tests();
     // free_tests();
     return (0);
 }
