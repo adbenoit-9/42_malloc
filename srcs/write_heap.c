@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 19:46:33 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 21:05:05 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
     /* get a part of the free chunk */
     else {
         newptr = (void *)free_chunk + size;
-        newptr->size = GET_SIZE(free_chunk->size) - size;
+        newptr->size = (free_chunk->size - size) | status;
         newptr->size |= S_FREE;
         newptr->previous = free_chunk->previous;
         newptr->prev_size = size | status;
@@ -61,7 +61,8 @@ void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
     free_chunk->previous = 0;
     return (newptr);
 }
- 
+
+/* Extends the chunk size if there is enough free space */ 
 void    *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin)
 {
     t_chunk *free_part;
@@ -69,11 +70,13 @@ void    *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin)
     int64_t  add_size;
     
     add_size = size - GET_SIZE(chunk->size);
-    if (GET_STATUS(chunk->size) & S_LARGE)
+    if (GET_STATUS(chunk->size) & S_LARGE
+            || (GET_STATUS(chunk->size) & S_SMALL && !ISSMALL(size))
+            || (GET_STATUS(chunk->size) & S_TINY && !ISTINY(size)))
         return (NULL);
     if (add_size <= 0)
         return (chunk);
-    free_part = (void *)(chunk + 1) + chunk->size;
+    free_part = (void *)chunk + GET_SIZE(chunk->size);
     if (!(free_part->size & S_FREE))
         return (NULL);
     tmp = *free_part;
@@ -101,6 +104,7 @@ void    *recycle_chunk(t_chunk **bin, size_t size)
         ptr = ptr->next;
     }
     if (!ptr || GET_SIZE(ptr->size) < size) {
+        print_chunk(ptr);
         return (NULL);
     }
     free_chunk = use_free_chunk(ptr, size, zone == TINY ? S_TINY : S_SMALL);

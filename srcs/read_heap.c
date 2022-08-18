@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:14:29 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 19:24:56 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 20:29:01 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ void    print_chunk(t_chunk *chunk)
 	if (chunk->size & S_LARGE)
 		PRINT("large");
 	if (chunk->size & S_FREE)
-		PRINT("free");
-	PRINT(" chunk --\n");
-	PRINT("prev_size : ");
+		PRINT("_free");
+	PRINT(" chunk 0x");
+	ft_putnbr_base(LONG_INT(chunk), HEXA);
+	PRINT("--\nprev_size : ");
 	ft_putnbr_base(GET_SIZE(chunk->prev_size), DEC);
 	PRINT(" bytes | status : ");
 	ft_putnbr_base(GET_STATUS(chunk->prev_size), DEC);

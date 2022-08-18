@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 19:49:19 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 20:59:27 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	*malloc(size_t size)
 		return (NULL);
 	size = (size % 16 == 0 ? size : (size / 16 + 1) * 16) + HEAD_SIZE;
 	ptr = NULL;
-	PRINT("TEST\n");
 	pthread_mutex_lock(&g_mutex);
 	if (ISTINY(size)) {
 		LITTLE_MALLOC(g_tiny_zone, g_tiny_bin, MAX_TINY);
@@ -83,17 +82,11 @@ void	*realloc(void *ptr, size_t size)
 		next->size = chunk->size - size;
 		next->prev_size = size | GET_STATUS(chunk->size);
 		chunk->size = size | GET_STATUS(chunk->size);
-		PRINT("before free\n");
-		show_alloc_mem();
 		free(next + 1);
-		PRINT("after free\n");
-		show_alloc_mem();
 		return (chunk + 1);
 	}
 	new_ptr = extend_chunk(chunk, size, chunk->size & S_TINY ? &g_tiny_bin : &g_small_bin);
 	if (!new_ptr) {
-		ft_putnbr_base(size, DEC);
-		PRINT("\n");
 		new_ptr = malloc(size);
 		if (new_ptr) {
 			for (size_t i = 0; ((uint8_t *)ptr)[i] && i < size; i++)
@@ -101,6 +94,8 @@ void	*realloc(void *ptr, size_t size)
 		}
 		free(ptr);
 	}
+	else
+		new_ptr += HEAD_SIZE;
 	return (new_ptr);
 }
 
