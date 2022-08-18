@@ -25,5 +25,6 @@
 void	ft_putnbr_base(int64_t n, char *base);
 void	ft_bzero(void *s, size_t n);
 size_t	ft_strlen(const char *str);
+void    print_metadata(void* ptr);
 
 #endif

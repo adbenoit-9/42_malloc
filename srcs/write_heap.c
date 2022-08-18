@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 21:05:05 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 00:12:00 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ void    *recycle_chunk(t_chunk **bin, size_t size)
         ptr = ptr->next;
     }
     if (!ptr || GET_SIZE(ptr->size) < size) {
-        print_chunk(ptr);
         return (NULL);
     }
     free_chunk = use_free_chunk(ptr, size, zone == TINY ? S_TINY : S_SMALL);
@@ -141,8 +140,10 @@ void    free_chunk(t_chunk *chunk, t_chunk *next)
     ft_bzero(chunk + 1, size - HEAD_SIZE);
     chunk->size |= S_FREE;
     chunk->next = next;
-    if (chunk->next)
-        chunk->next->previous = chunk;   
+    NEXT_CHUNK(chunk)->prev_size = chunk->size;
+    if (chunk->next) {
+        chunk->next->previous = chunk;
+    }
 }
 
 void    *delete_chunk(t_chunk *chunk)
@@ -159,4 +160,41 @@ void    *delete_chunk(t_chunk *chunk)
         ptr = chunk->next;
     munmap(chunk, GET_SIZE(chunk->size));
     return (ptr);
+}
+
+void    merge_free_zone(t_chunk *chunk, t_chunk **bin)
+{
+    t_chunk *prev, *next, *front_merge;
+    int     max_zone;
+    
+    if (!chunk || !(chunk->size & S_FREE))
+        return ;
+    next = NEXT_CHUNK(chunk);
+    front_merge = NULL;
+    max_zone = chunk->size & S_TINY ? MAX_TINY : MAX_SMALL;
+    if (LONG_INT(next) < ZONE_SIZE(max_zone) - HEAD_SIZE && next->size & S_FREE) {
+        chunk->size += GET_SIZE(next->size);
+        if (next->next)
+            next->next->previous = next->previous;
+        if (next->previous)
+            next->previous->next = next->next;
+        if (LONG_INT(NEXT_CHUNK(chunk)) < ZONE_SIZE(max_zone) - HEAD_SIZE)
+            NEXT_CHUNK(chunk)->prev_size = chunk->size;
+        ft_bzero(next, HEAD_SIZE);
+    }
+    if (chunk->prev_size & S_FREE) {
+        prev = (void *)chunk - GET_SIZE(chunk->prev_size);
+        front_merge = prev;
+        front_merge->size += GET_SIZE(chunk->size);
+        if (chunk->next)
+            chunk->next->previous = chunk->previous;
+        if (chunk->previous)
+            chunk->previous->next = chunk->next;
+        NEXT_CHUNK(front_merge)->prev_size = front_merge->size;
+        ft_bzero(chunk, HEAD_SIZE);
+            
+    }
+    if (!front_merge) {
+        *bin = chunk;
+    }
 }

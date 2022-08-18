@@ -6,41 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:14:29 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 20:29:01 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 21:52:10 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "defs_malloc.h"
-
-void    print_chunk(t_chunk *chunk)
-{
-	if (!chunk) {
-		PRINT("-- null chunk --\n");
-		return ;
-	}
-	PRINT("-- ");
-	if (chunk->size & S_TINY)
-		PRINT("tiny");
-	if (chunk->size & S_SMALL)
-		PRINT("small");
-	if (chunk->size & S_LARGE)
-		PRINT("large");
-	if (chunk->size & S_FREE)
-		PRINT("_free");
-	PRINT(" chunk 0x");
-	ft_putnbr_base(LONG_INT(chunk), HEXA);
-	PRINT("--\nprev_size : ");
-	ft_putnbr_base(GET_SIZE(chunk->prev_size), DEC);
-	PRINT(" bytes | status : ");
-	ft_putnbr_base(GET_STATUS(chunk->prev_size), DEC);
-	PRINT("\nsize : ");
-	ft_putnbr_base(GET_SIZE(chunk->size), DEC);
-	PRINT(" bytes\nprevious : 0x");
-	ft_putnbr_base(LONG_INT(chunk->previous), HEXA);
-	PRINT("\nnext : 0x");
-	ft_putnbr_base(LONG_INT(chunk->next), HEXA);
-	PRINT("\n-----------\n");
-}
 
 void	print_block(t_chunk *block)
 {

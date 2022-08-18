@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 19:41:42 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 00:13:06 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@
 # define ISSMALL(size) (size > MAX_TINY && size <= MAX_SMALL)
 # define ISLARGE(size) (size > MAX_SMALL)
 
-# define ZONE_SIZE(max) (((HEAD_SIZE + max) * 100 / getsizepage() +\
-		(size % getpagesize() == 0)) * getsizepage())
+# define ZONE_SIZE(max) (max * 100)
         
 #define LITTLE_MALLOC(zone, bin, zone_size) do {\
         if (zone == 0x0) {\
@@ -67,8 +66,9 @@
 # define GET_STATUS(n) (n & (S_LARGE | S_SMALL | S_TINY))
 
 /* size */
-# define GET_SIZE(n) (n & ~(S_TINY | S_SMALL | S_LARGE | S_FREE))
-# define HEAD_SIZE sizeof(t_chunk)
+# define GET_SIZE(n) (n & ~0b1111)
+# define HEAD_SIZE 32
+# define NEXT_CHUNK(chunk) ((t_chunk *)((void *)(chunk) + ((chunk)->size & ~0b1111)))
 
 typedef struct	s_chunk
 {
@@ -77,7 +77,5 @@ typedef struct	s_chunk
 	struct s_chunk	*previous;		/* pointer to previous chunk in list */
 	struct s_chunk	*next;			/* pointer to next chunk in list */
 }				t_chunk;
-
-void    	print_chunk(t_chunk *chunk);
 
 #endif

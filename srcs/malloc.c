@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 20:59:27 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 23:50:58 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,13 @@ void	free(void *ptr)
 	}
 	else if (chunk->size & S_TINY) {
 		free_chunk(chunk, g_tiny_bin);
-		g_tiny_bin = chunk;
+		merge_free_zone(chunk, &g_tiny_bin);
+		// g_tiny_bin = chunk;
 	}
 	else {
 		free_chunk(chunk, g_small_bin);
-		g_small_bin = chunk;
+		merge_free_zone(chunk, &g_small_bin);
+		// g_small_bin = chunk;
 	}
 	pthread_mutex_unlock(&g_mutex);
 }

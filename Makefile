@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/18 16:45:12 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/18 22:22:34 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,8 @@ SRC				:=	malloc.c \
 					iter_heap.c
 SUB_SRC			:= ft_putnbr_base.c \
 					ft_bzero.c \
-					ft_strlen.c
+					ft_strlen.c \
+					print_metadata.c
 SRC				+= $(addprefix utils/, $(SUB_SRC))
 
 TEST_SRC		:=	main.c \
@@ -106,8 +107,7 @@ re: fclean all
 run: $(NAME)
 	@$(CC) $(CFLAGS) $(IFLAGS) $(TEST_SRC) $(LINK_NAME) -o $(TEST_EXEC)
 	@echo "[$(OK)] tests"
-	@echo
-	@./run.sh ./$(TEST_EXEC)
+	@echo "usage:\n  ./run.sh ./tests_malloc [function(s) to test]"
 
 debug: CFLAGS += -DDEBUG
 debug: re
