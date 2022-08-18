@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 19:44:33 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 14:07:24 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void    *create_heap(size_t size)
     // check limit of mem getrlimit() ?
 	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE\
 		| MAP_ANON, -1, 0);
-	if (errno)
-		return (0x0);
-	ft_bzero(ptr, size);
-    ((t_chunk *)ptr)->size = size | S_FREE;
+    if (ptr) {
+        ft_bzero(ptr, size);
+        ((t_chunk *)ptr)->size = size | S_FREE;
+    }
 	return (ptr);
 }
 

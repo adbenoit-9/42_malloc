@@ -7,5 +7,6 @@ int main(){
     printf("%d\n", *((int *)ptr - 16));
     ptr = malloc(500);
     free(ptr);
+    free(ptr);
     printf("%d\n", *((int *)ptr - 16));
 }

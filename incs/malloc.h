@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 19:44:11 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 14:16:47 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/time.h> 
 # include <sys/resource.h>
 # include <pthread.h>
+# include <signal.h>
 
 # define PRINT(s) write(STDIN_FILENO, s, strlen(s))
 // # define NONE 0

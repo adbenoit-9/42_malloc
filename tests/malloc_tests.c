@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:09 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 18:38:28 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 14:11:21 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,16 @@ void    test_n_malloc_by_zone(uint64_t n)
         PRINT(" - ");
         ptr = test(100, "small hello");
     }
-    // for (uint64_t i = 0; i < n; i++) {
-    //     ft_putnbr_base(i, DEC);
-    //     PRINT(" - ");
-    //     ptr = test(1000000, "large hello");
-    // }
-    show_alloc_mem_ex();
     free(ptr);
+    free(ptr);
+    for (uint64_t i = 0; i < n; i++) {
+        ft_putnbr_base(i, DEC);
+        PRINT(" - ");
+        ptr = test(1000000, "large hello");
+    }
+    show_alloc_mem();
+    show_alloc_mem();
+    // show_alloc_mem_ex();
 }
 
 void    malloc_tests(void)
@@ -74,4 +77,3 @@ void    malloc_tests(void)
     // test_max_malloc_by_zone();
     test_n_malloc_by_zone(4);
 }
-// 6C616D73 = lams

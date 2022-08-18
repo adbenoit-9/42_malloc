@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 19:48:21 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 14:35:36 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,49 +17,42 @@ t_chunk	*g_small_zone;
 t_chunk	*g_large_zone;
 t_chunk	*g_tiny_bin;
 t_chunk	*g_small_bin;
-pthread_mutex_t	g_tiny_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t	g_small_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t	g_large_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t	g_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void	*malloc(size_t size)
 {
 	void	*ptr;
 
-	pthread_mutex_lock(&g_large_mutex);
-	size = size % 16 == 0 ? size : (size / 16 + 1) * 16;
+	size = (size % 16 == 0 ? size : (size / 16 + 1) * 16) + HEAD_SIZE;
 	ptr = NULL;
+	if (pthread_mutex_lock(&g_mutex))
+		return (NULL);
 	if (ISTINY(size)) {
-		// pthread_mutex_lock(&g_tiny_mutex);
 		if (g_tiny_zone == 0x0) {
 			g_tiny_bin = create_heap(MAX_TINY * 100);
 		}
-		ptr = recycle_chunk(&g_tiny_bin, size + HEAD_SIZE);
+		ptr = recycle_chunk(&g_tiny_bin, size);
 		if (g_tiny_zone == 0x0)
 			g_tiny_zone = ptr;
-		// pthread_mutex_unlock(&g_tiny_mutex);
 	}
 	else if (ISSMALL(size)) {
-		// pthread_mutex_lock(&g_small_mutex);
 		if (g_small_zone == 0x0) {
 			g_small_bin = create_heap(MAX_SMALL * 100);
 		}
-		ptr = recycle_chunk(&g_small_bin, size + HEAD_SIZE);
+		ptr = recycle_chunk(&g_small_bin, size);
 		if (g_small_zone == 0x0)
 			g_small_zone = ptr;
-		// pthread_mutex_unlock(&g_small_mutex);
 	}
 	if (!ptr) {
-		// pthread_mutex_lock(&g_large_mutex);
-		ptr = new_chunk(size + HEAD_SIZE, g_large_zone);
-		// pthread_mutex_unlock(&g_large_mutex);
+		ptr = new_chunk(size, g_large_zone);
 	}
 	if (ptr && ((t_chunk *)ptr)->size & S_LARGE) {
 		g_large_zone = ptr;
 	}
+	pthread_mutex_unlock(&g_mutex);
 	if (ptr) {
 		ptr += HEAD_SIZE;
 	}
-	pthread_mutex_unlock(&g_large_mutex);
 	return (ptr);
 }
 
@@ -69,14 +62,17 @@ void	free(void *ptr)
 
 	if (!ptr)
 		return ;
-	pthread_mutex_lock(&g_large_mutex);
+	pthread_mutex_lock(&g_mutex);
 	chunk = (t_chunk *)(ptr - HEAD_SIZE);
+	if (chunk->size & S_FREE) {
+		write(STDERR_FILENO, "free(): double free detected\n", 30);
+		kill(0, SIGABRT);
+	}
 	if (chunk->size & S_LARGE) {
 		if (chunk->next) {
 			chunk->next->previous = chunk->previous;
 			chunk->next->prev_size = chunk->prev_size;
 		}
-		else
 		if (chunk->previous)
 			chunk->previous->next = chunk->next;
 		else
@@ -98,7 +94,7 @@ void	free(void *ptr)
 		if (chunk->next)
 			chunk->next->previous = chunk;
 	}
-	pthread_mutex_unlock(&g_large_mutex);
+	pthread_mutex_unlock(&g_mutex);
 }
 
 void	*realloc(void *ptr, size_t size)
@@ -116,7 +112,7 @@ void	*realloc(void *ptr, size_t size)
 
 void	show_alloc_mem(void)
 {
-	pthread_mutex_lock(&g_large_mutex);
+	pthread_mutex_lock(&g_mutex);
 	t_chunk		*it;
 	t_chunk		*zones[] = {g_tiny_zone, g_small_zone};
 	char		*zones_name[] = {"TINY", "SMALL"};
@@ -147,18 +143,18 @@ void	show_alloc_mem(void)
 	PRINT("Total : ");
 	ft_putnbr_base(total, DEC);
 	PRINT("\n");
-	pthread_mutex_unlock(&g_large_mutex);
+	pthread_mutex_unlock(&g_mutex);
 }
 
 void	show_alloc_mem_ex()
 {
-	pthread_mutex_lock(&g_large_mutex);
 	t_chunk		*it;
 	t_chunk		*zones[] = {g_tiny_zone, g_small_zone};
 	char		*zones_name[] = {"TINY", "SMALL"};
 	uint64_t	zones_flag[] = {S_TINY, S_SMALL};
 	uint64_t	total = 0;
 
+	pthread_mutex_lock(&g_mutex);
 	for (uint8_t i = 0; i < NZONES - 1; i++) {
 		it = zones[i];
 		print_zone(zones[i], zones_name[i]);
@@ -182,6 +178,6 @@ void	show_alloc_mem_ex()
 	PRINT("Total : ");
 	ft_putnbr_base(total, DEC);
 	PRINT("\n");
-	pthread_mutex_unlock(&g_large_mutex);
+	pthread_mutex_unlock(&g_mutex);
 	
 }
