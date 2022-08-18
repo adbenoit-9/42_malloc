@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 19:35:36 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/07 16:53:21 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 15:59:08 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "utils.h"
 
 void	ft_putnbr_base(int64_t n, char *base)
 {
@@ -25,9 +25,9 @@ void	ft_putnbr_base(int64_t n, char *base)
 		}
 		if (n > 0)
 		{
-			if (n / strlen(base) != 0)
-				ft_putnbr_base(n / strlen(base), base);
-			write(STDIN_FILENO, &base[n % strlen(base)], 1);
+			if (n / ft_strlen(base) != 0)
+				ft_putnbr_base(n / ft_strlen(base), base);
+			write(STDIN_FILENO, &base[n % ft_strlen(base)], 1);
 		}
 	}
 }

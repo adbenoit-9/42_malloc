@@ -6,78 +6,48 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 14:16:47 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 16:43:03 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_H
 # define MALLOC_H
 
-# include <unistd.h>
-# include <stdio.h>
-# include <sys/mman.h>
-# include <string.h>
-# include <errno.h>
-# include <stdbool.h>
-# include <stdint.h>
-# include <sys/time.h> 
-# include <sys/resource.h>
-# include <pthread.h>
-# include <signal.h>
+# include "libft_malloc.h"
+# include "defs_malloc.h"
 
-# define PRINT(s) write(STDIN_FILENO, s, strlen(s))
-// # define NONE 0
-# define HEXA "0123456789ABCDEF"
-# define DEC "0123456789"
-# define LONG_INT(ptr) (int64_t)ptr
+/*
+** Global variables
+*/
 
-# define S_TINY 0b1000
-# define S_SMALL 0b0100
-# define S_LARGE 0b0010
-# define S_FREE 0b0001
-# define GET_SIZE(n) (n & ~(S_TINY | S_SMALL | S_LARGE | S_FREE))
-# define GET_STATUS(n) (n & (S_TINY | S_SMALL | S_LARGE | S_FREE))
+t_chunk	*g_tiny_zone;
+t_chunk	*g_small_zone;
+t_chunk	*g_large_zone;
+t_chunk	*g_tiny_bin;
+t_chunk	*g_small_bin;
+pthread_mutex_t	g_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-# define NBINS 128
+/*
+** Handle heap functions
+*/
 
-/* zones */
+void    	*create_heap(size_t size);
+void    	*recycle_chunk(t_chunk **bins, size_t size);
+void    	*new_chunk(size_t size, t_chunk *next);
+void    	set_free_chunk(t_chunk *chunk, size_t size, t_chunk *next, t_chunk *prev);
 
-# define NZONES 3
-# define TINY 0
-# define SMALL 1
-# define LARGE 2
-# define MAX_TINY 128
-# define MAX_SMALL 1024
-# define ISTINY(size) (size <= MAX_TINY)
-# define ISSMALL(size) (size > MAX_TINY && size <= MAX_SMALL)
-# define ISLARGE(size) (size > MAX_SMALL)
+/*
+** Display heap functions
+*/
 
-# define HEAD_SIZE sizeof(t_chunk)
-# define ZONE_SIZE(max) (((HEAD_SIZE + max) * 100 / getsizepage() +\
-		(size % getpagesize() == 0)) * getsizepage())
+void		print_block(t_chunk *block);
+void    	print_chunk(t_chunk *chunk);
+void	    hexa_dump(t_chunk *chunk);
 
-typedef struct	s_chunk
-{
-	size_t			prev_size;		/* Size of previous chunk in memory*/
-	size_t			size;			/* Size in bytes, including overhead. */
-	struct s_chunk	*previous;		/* pointer to previous chunk in list */
-	struct s_chunk	*next;			/* pointer to next chunk in list */
-}				t_chunk;
+/*
+** Iter heap functions
+*/
 
-void	free(void *ptr);
-void	*malloc(size_t size);
-void	*realloc(void *ptr, size_t size);
-void	show_alloc_mem(void);
-void	ft_putnbr_base(int64_t n, char *base);
-void	ft_bzero(void *s, size_t n);
-void    *recycle_chunk(t_chunk **bins, size_t size);
-void    *new_chunk(size_t size, t_chunk *next);
-void	print_block(t_chunk *block);
-void	print_zone(t_chunk *addr, char *name);
-void    print_chunk(t_chunk *chunk);
-void    *create_heap(size_t size);
-void    set_free_chunk(t_chunk *chunk, size_t size, t_chunk *next, t_chunk *prev);
-void	hexa_dump(char *ptr, size_t size);
-void	show_alloc_mem_ex();
+uint64_t	iter_heap_zone(void *top, void (*funct)(t_chunk *), uint8_t zone);
 
 #endif

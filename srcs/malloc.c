@@ -6,23 +6,18 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 14:35:36 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 16:46:19 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-t_chunk	*g_tiny_zone;
-t_chunk	*g_small_zone;
-t_chunk	*g_large_zone;
-t_chunk	*g_tiny_bin;
-t_chunk	*g_small_bin;
-pthread_mutex_t	g_mutex = PTHREAD_MUTEX_INITIALIZER;
-
 void	*malloc(size_t size)
 {
 	void	*ptr;
 
+	if (size == 0)
+		return (NULL);
 	size = (size % 16 == 0 ? size : (size / 16 + 1) * 16) + HEAD_SIZE;
 	ptr = NULL;
 	if (pthread_mutex_lock(&g_mutex))
@@ -113,33 +108,17 @@ void	*realloc(void *ptr, size_t size)
 void	show_alloc_mem(void)
 {
 	pthread_mutex_lock(&g_mutex);
-	t_chunk		*it;
-	t_chunk		*zones[] = {g_tiny_zone, g_small_zone};
-	char		*zones_name[] = {"TINY", "SMALL"};
-	uint64_t	zones_flag[] = {S_TINY, S_SMALL};
-	uint64_t	total = 0;
+	uint64_t	total;
+	t_chunk		*top;
 
-	for (uint8_t i = 0; i < NZONES - 1; i++) {
-		it = zones[i];
-		print_zone(zones[i], zones_name[i]);
-		while (it != 0x0 && GET_STATUS(it->size) & zones_flag[i]) {
-			if (!(GET_STATUS(it->size) & S_FREE)) {
-				print_block(it);
-				total += GET_SIZE(it->size) - HEAD_SIZE;
-			}
-			it = (void *)it + GET_SIZE(it->size);
-		}
+	pthread_mutex_lock(&g_mutex);
+	total = iter_heap_zone(g_tiny_zone, &print_block, TINY);
+	total += iter_heap_zone(g_small_zone, &print_block, SMALL);
+	top = g_large_zone;
+	while (top && top->next) {
+		top = top->next;
 	}
-	it = g_large_zone;
-	while (it && it->next) {
-		it = it->next;
-	}
-	print_zone(it, "LARGE");
-	while (it) {
-		print_block(it);
-		total += GET_SIZE(it->size);
-		it = it->previous;
-	}
+	total += iter_heap_zone(top, &print_block, LARGE);
 	PRINT("Total : ");
 	ft_putnbr_base(total, DEC);
 	PRINT("\n");
@@ -148,36 +127,15 @@ void	show_alloc_mem(void)
 
 void	show_alloc_mem_ex()
 {
-	t_chunk		*it;
-	t_chunk		*zones[] = {g_tiny_zone, g_small_zone};
-	char		*zones_name[] = {"TINY", "SMALL"};
-	uint64_t	zones_flag[] = {S_TINY, S_SMALL};
-	uint64_t	total = 0;
+	t_chunk		*top;
 
 	pthread_mutex_lock(&g_mutex);
-	for (uint8_t i = 0; i < NZONES - 1; i++) {
-		it = zones[i];
-		print_zone(zones[i], zones_name[i]);
-		while (it != 0x0 && GET_STATUS(it->size) & zones_flag[i]) {
-			if (!(GET_STATUS(it->size) & S_FREE)) {
-				hexa_dump((char *)(it + 1), GET_SIZE(it->size) - HEAD_SIZE);
-				total += GET_SIZE(it->size) - HEAD_SIZE;
-			}
-			it = (void *)it + GET_SIZE(it->size);
-		}
+	iter_heap_zone(g_tiny_zone, &hexa_dump, TINY);
+	iter_heap_zone(g_small_zone, &hexa_dump, SMALL);
+	top = g_large_zone;
+	while (top && top->next) {
+		top = top->next;
 	}
-	it = g_large_zone;
-	while (it && it->next) {
-		it = it->next;
-	}
-	print_zone(it, "LARGE");
-	while (it) {
-		hexa_dump((char *)(it + 1), GET_SIZE(it->size) - HEAD_SIZE);
-		it = it->previous;
-	}
-	PRINT("Total : ");
-	ft_putnbr_base(total, DEC);
-	PRINT("\n");
+	iter_heap_zone(top, &hexa_dump, LARGE);
 	pthread_mutex_unlock(&g_mutex);
-	
 }

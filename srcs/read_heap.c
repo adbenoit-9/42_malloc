@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   read_heap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:14:29 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/17 19:03:29 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 16:42:27 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "defs_malloc.h"
 
 void    print_chunk(t_chunk *chunk)
 {
@@ -39,15 +39,6 @@ void    print_chunk(t_chunk *chunk)
 	PRINT(" bytes\n-----------\n");
 }
 
-void	print_zone(t_chunk *addr, char *name)
-{
-
-	PRINT(name);
-	PRINT(" : 0x");
-	ft_putnbr_base(LONG_INT(addr), HEXA);
-	PRINT("\n");
-}
-
 void	print_block(t_chunk *block)
 {
 	PRINT("0x");
@@ -60,8 +51,12 @@ void	print_block(t_chunk *block)
 	PRINT(" bytes\n");
 }
 
-void	hexa_dump(char *ptr, size_t size)
+
+void	hexa_dump(t_chunk *chunk)
 {
+	char	*ptr = (char *)(chunk + 1);
+	size_t	size = GET_SIZE(chunk->size) - HEAD_SIZE;
+
 	PRINT("0x");
 	ft_putnbr_base(LONG_INT(ptr), HEXA);
 	PRINT("  ");

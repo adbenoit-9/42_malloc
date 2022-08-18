@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 14:07:24 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 16:12:08 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "defs_malloc.h"
 
 void    *create_heap(size_t size)
 {
@@ -46,7 +46,6 @@ void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
     }
     /* get a part of the free chunk */
     else {
-        /* reset the free part */
         newptr = (void *)free_chunk + size;
         newptr->size = GET_SIZE(free_chunk->size) - size;
         newptr->size |= S_FREE;
@@ -59,21 +58,19 @@ void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
             newptr->previous->next = newptr;
         free_chunk->size = size | status;
     }
-    /* reset the use part */
     free_chunk->next = 0;
     free_chunk->previous = 0;
     return (newptr);
 }
 
+/* Get a free zone pre-allocate on the heap */
 void    *recycle_chunk(t_chunk **bin, size_t size)
 {
     uint8_t     zone = ISTINY(size) ? TINY : SMALL;
     t_chunk     *free_chunk, *ptr;
 
-    if ((zone == SMALL && !ISSMALL(size)) || !*bin) {
+    if (!bin || !*bin)
         return (NULL);
-    }
-    /* get a free zone to use */
     ptr = *bin;
     while (ptr->next && GET_SIZE(ptr->size) < size) {
         ptr = ptr->next;
@@ -87,6 +84,8 @@ void    *recycle_chunk(t_chunk **bin, size_t size)
     return (ptr);
 }
 
+/* Allocates a new chunk on the heap.
+Return a pointer to the begin of the chunk.*/
 void    *new_chunk(size_t size, t_chunk *next)
 {
     t_chunk *chunk;

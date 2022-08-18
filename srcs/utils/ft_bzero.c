@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/11 15:11:28 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/11 15:11:38 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/18 15:59:08 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "utils.h"
 
 void	ft_bzero(void *s, size_t n)
 {
