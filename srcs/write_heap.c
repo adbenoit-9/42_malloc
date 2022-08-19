@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 02:57:12 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 14:34:50 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void    *create_heap(size_t size)
 
 	size = (size % getpagesize() == 0) ? size : \
         (size / getpagesize() + 1) * getpagesize();
-    // check limit of mem getrlimit() ?
 	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
     if (ptr) {
         ft_bzero(ptr, size);
@@ -77,7 +76,7 @@ void    *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin, uint64_t limit
     if (add_size <= 0)
         return (chunk);
     free_part = NEXT_CHUNK(chunk);
-    if (ULONG_INT(free_part) >= limit || !(free_part->size & S_FREE)
+    if (ULONG_INT(free_part) > limit || !(free_part->size & S_FREE)
             || free_part->size < add_size)
         return (NULL);
     tmp = *free_part;
@@ -138,7 +137,6 @@ void    free_chunk(t_chunk *chunk, t_chunk *next, uint64_t limit)
 {
     size_t  size = GET_SIZE(chunk->size);
 
-    print_metadata(chunk);
     ft_bzero(chunk + 1, size - HEAD_SIZE);
     chunk->size |= S_FREE;
     chunk->next = next;

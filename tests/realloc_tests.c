@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 02:35:44 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 14:34:33 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void    realloc_tests(void)
 {
     void *ptr = realloc(NULL, 40);
     strcpy(ptr, "heyyyyyyyyyyyyyyy");
-    show_alloc_mem();
+    show_alloc_mem_ex();
     // ptr = realloc(ptr, 200);
     // show_alloc_mem();
     ptr = realloc(ptr, 20);

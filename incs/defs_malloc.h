@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 02:26:32 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 13:31:01 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@
 # define ISSMALL(size) (size > MAX_TINY && size <= MAX_SMALL)
 # define ISLARGE(size) (size > MAX_SMALL)
 
-# define ZONE_SIZE(max) (max * 100)
-# define ZONE_LIMIT(top, max) (uint64_t)(top + ZONE_SIZE(max) - HEAD_SIZE)
+# define ZONE_SIZE(max) ((((max) / getpagesize() + (max) % getpagesize()) * getpagesize()) * 100)
+# define ZONE_LIMIT(top, max) ((uint64_t)(top) + (max) * 100 - HEAD_SIZE)
         
 #define LITTLE_MALLOC(zone, bin, zone_size) do {\
         if (zone == 0x0) {\
