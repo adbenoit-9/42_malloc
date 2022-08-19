@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:09 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 17:32:17 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 02:25:15 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void    *test(size_t n, char *str)
         return (NULL);
     }
     PRINT("\033[1;33mptr: ");
-    ft_putnbr_base(LONG_INT(ptr), HEXA);
+    ft_putnbr_base(ULONG_INT(ptr), HEXA);
     PRINT(" | ");
     strcpy(ptr, str);
     PRINT(ptr);

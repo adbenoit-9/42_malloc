@@ -28,7 +28,7 @@ void    print_metadata(void* ptr)
 	if (*(size_t *)(ptr + 8) & 0b0001)
 		PRINT("_free");
 	PRINT(" chunk 0x");
-	ft_putnbr_base(LONG_INT(ptr), HEXA);
+	ft_putnbr_base(ULONG_INT(ptr), HEXA);
 	PRINT("--\nprev_size : ");
 	if (*(size_t *)ptr == 0)
 		PRINT("0");

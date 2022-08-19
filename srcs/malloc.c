@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 23:50:58 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 02:56:16 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,12 @@ void	free(void *ptr)
 			g_large_zone = chunk;
 	}
 	else if (chunk->size & S_TINY) {
-		free_chunk(chunk, g_tiny_bin);
-		merge_free_zone(chunk, &g_tiny_bin);
-		// g_tiny_bin = chunk;
+		free_chunk(chunk, g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
+		merge_free_zone(chunk, &g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
 	}
 	else {
-		free_chunk(chunk, g_small_bin);
-		merge_free_zone(chunk, &g_small_bin);
-		// g_small_bin = chunk;
+		free_chunk(chunk, g_small_bin, ZONE_LIMIT(g_small_zone, MAX_SMALL));
+		merge_free_zone(chunk, &g_small_bin, ZONE_LIMIT(g_small_zone, MAX_SMALL));
 	}
 	pthread_mutex_unlock(&g_mutex);
 }
@@ -79,7 +77,7 @@ void	*realloc(void *ptr, size_t size)
 	}
 	size = (size % 16 == 0 ? size : (size / 16 + 1) * 16) + HEAD_SIZE;
 	chunk = ptr - HEAD_SIZE;
-	if (size < GET_SIZE(chunk->size)) {
+	if (GET_SIZE(chunk->size) - size > HEAD_SIZE) {
 		next = ptr + size;
 		next->size = chunk->size - size;
 		next->prev_size = size | GET_STATUS(chunk->size);
@@ -87,7 +85,9 @@ void	*realloc(void *ptr, size_t size)
 		free(next + 1);
 		return (chunk + 1);
 	}
-	new_ptr = extend_chunk(chunk, size, chunk->size & S_TINY ? &g_tiny_bin : &g_small_bin);
+	new_ptr = extend_chunk(chunk, size, chunk->size & S_TINY ? &g_tiny_bin : &g_small_bin,\
+			 ZONE_LIMIT(chunk->size & S_TINY ? &g_tiny_zone : &g_small_zone,\
+			 	chunk->size & S_TINY ? MAX_TINY : MAX_SMALL));
 	if (!new_ptr) {
 		new_ptr = malloc(size);
 		if (new_ptr) {

@@ -20,7 +20,7 @@
 # define HEXA "0123456789ABCDEF"
 # define DEC "0123456789"
 # define PRINT(s) write(STDIN_FILENO, s, ft_strlen(s))
-# define LONG_INT(ptr) (int64_t)ptr
+# define ULONG_INT(ptr) (uint64_t)ptr
 
 void	ft_putnbr_base(int64_t n, char *base);
 void	ft_bzero(void *s, size_t n);

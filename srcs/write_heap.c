@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 00:12:00 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 02:57:12 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
 }
 
 /* Extends the chunk size if there is enough free space */ 
-void    *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin)
+void    *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin, uint64_t limit)
 {
     t_chunk *free_part;
     t_chunk tmp;
-    int64_t  add_size;
+    uint64_t  add_size;
     
     add_size = size - GET_SIZE(chunk->size);
     if (GET_STATUS(chunk->size) & S_LARGE
@@ -76,8 +76,9 @@ void    *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin)
         return (NULL);
     if (add_size <= 0)
         return (chunk);
-    free_part = (void *)chunk + GET_SIZE(chunk->size);
-    if (!(free_part->size & S_FREE))
+    free_part = NEXT_CHUNK(chunk);
+    if (ULONG_INT(free_part) >= limit || !(free_part->size & S_FREE)
+            || free_part->size < add_size)
         return (NULL);
     tmp = *free_part;
     tmp.size -= add_size;
@@ -133,14 +134,16 @@ void    *new_chunk(size_t size, t_chunk *next)
     return (chunk);
 }
 
-void    free_chunk(t_chunk *chunk, t_chunk *next)
+void    free_chunk(t_chunk *chunk, t_chunk *next, uint64_t limit)
 {
     size_t  size = GET_SIZE(chunk->size);
 
+    print_metadata(chunk);
     ft_bzero(chunk + 1, size - HEAD_SIZE);
     chunk->size |= S_FREE;
     chunk->next = next;
-    NEXT_CHUNK(chunk)->prev_size = chunk->size;
+    if (ULONG_INT(NEXT_CHUNK(chunk)) < limit)
+        NEXT_CHUNK(chunk)->prev_size = chunk->size;
     if (chunk->next) {
         chunk->next->previous = chunk;
     }
@@ -162,23 +165,21 @@ void    *delete_chunk(t_chunk *chunk)
     return (ptr);
 }
 
-void    merge_free_zone(t_chunk *chunk, t_chunk **bin)
+void    merge_free_zone(t_chunk *chunk, t_chunk **bin, uint64_t limit)
 {
     t_chunk *prev, *next, *front_merge;
-    int     max_zone;
     
     if (!chunk || !(chunk->size & S_FREE))
         return ;
     next = NEXT_CHUNK(chunk);
     front_merge = NULL;
-    max_zone = chunk->size & S_TINY ? MAX_TINY : MAX_SMALL;
-    if (LONG_INT(next) < ZONE_SIZE(max_zone) - HEAD_SIZE && next->size & S_FREE) {
+    if (ULONG_INT(next) < limit && next->size & S_FREE) {
         chunk->size += GET_SIZE(next->size);
         if (next->next)
             next->next->previous = next->previous;
         if (next->previous)
             next->previous->next = next->next;
-        if (LONG_INT(NEXT_CHUNK(chunk)) < ZONE_SIZE(max_zone) - HEAD_SIZE)
+        if (ULONG_INT(NEXT_CHUNK(chunk)) < limit)
             NEXT_CHUNK(chunk)->prev_size = chunk->size;
         ft_bzero(next, HEAD_SIZE);
     }
@@ -190,7 +191,8 @@ void    merge_free_zone(t_chunk *chunk, t_chunk **bin)
             chunk->next->previous = chunk->previous;
         if (chunk->previous)
             chunk->previous->next = chunk->next;
-        NEXT_CHUNK(front_merge)->prev_size = front_merge->size;
+        if (ULONG_INT(NEXT_CHUNK(front_merge)) < limit)
+            NEXT_CHUNK(front_merge)->prev_size = front_merge->size;
         ft_bzero(chunk, HEAD_SIZE);
             
     }

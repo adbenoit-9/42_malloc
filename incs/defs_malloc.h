@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 00:13:06 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 02:26:32 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,15 @@
 # define SMALL 1
 # define LARGE 2
 
-# define MAX_TINY 128
-# define MAX_SMALL 1024
+# define MAX_TINY (uint32_t)(getpagesize() / 32)
+# define MAX_SMALL (uint32_t)(getpagesize() / 4)
 
 # define ISTINY(size) (size <= MAX_TINY)
 # define ISSMALL(size) (size > MAX_TINY && size <= MAX_SMALL)
 # define ISLARGE(size) (size > MAX_SMALL)
 
 # define ZONE_SIZE(max) (max * 100)
+# define ZONE_LIMIT(top, max) (uint64_t)(top + ZONE_SIZE(max) - HEAD_SIZE)
         
 #define LITTLE_MALLOC(zone, bin, zone_size) do {\
         if (zone == 0x0) {\
