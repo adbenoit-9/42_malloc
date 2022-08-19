@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:09 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 16:40:56 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:52:47 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 
 void    test_max_malloc_by_zone()
 {
-    show_alloc_mem();
-    for (uint16_t i = 0; i < 145; i++) {
-        ft_putnbr_base(i, DEC);
-        PRINT(" - ");
+    void *ptr;
+    
+    for (uint16_t i = 0; i < 400; i++) {
+        ptr = malloc(3);
     }
-    for (uint16_t i = 0; i < 145; i++) {
-        ft_putnbr_base(i, DEC);
-        PRINT(" - ");
+    for (uint16_t i = 0; i < 400; i++) {
+        ptr = malloc(300);
     }
     show_alloc_mem();
+    free(ptr);
 }
 
 void    test_n_malloc_by_zone(uint64_t n)
@@ -85,4 +85,11 @@ void    malloc_tests(void)
     PRINT("\033[30m");
     show_alloc_mem();
     PRINT("\033[0m");
+    
+    // PRINT("\n\033[36;1m# overload zones\033[0m\n");
+    // test_max_malloc_by_zone();
+    // PRINT("\033[30m");
+    // show_alloc_mem();
+    // PRINT("\033[0m");
+    
 }
