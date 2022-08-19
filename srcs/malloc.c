@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 14:46:37 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 15:13:15 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,15 @@ void	*realloc(void *ptr, size_t size)
 	t_chunk	*next;
 
 	if (!ptr || size == 0) {
+		print_metadata(ptr - HEAD_SIZE);
 		free(ptr);
+		PRINT("TEST\n");
 		return (malloc(size));
 	}
 	size = (size % 16 == 0 ? size : (size / 16 + 1) * 16) + HEAD_SIZE;
 	chunk = ptr - HEAD_SIZE;
 	if (GET_SIZE(chunk->size) > size && GET_SIZE(chunk->size) - size > HEAD_SIZE) {
 		next = ptr + size;
-		print_metadata(next);
 		next->size = chunk->size - size;
 		next->prev_size = size | GET_STATUS(chunk->size);
 		chunk->size = size | GET_STATUS(chunk->size);

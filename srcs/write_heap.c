@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 14:34:50 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 15:07:26 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,19 @@ void    *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin, uint64_t limit
 {
     t_chunk *free_part;
     t_chunk tmp;
-    uint64_t  add_size;
+    int64_t  add_size;
     
     add_size = size - GET_SIZE(chunk->size);
+    ft_putnbr_base(add_size, DEC);
+    if (add_size <= 0)
+        return (chunk);
     if (GET_STATUS(chunk->size) & S_LARGE
             || (GET_STATUS(chunk->size) & S_SMALL && !ISSMALL(size))
             || (GET_STATUS(chunk->size) & S_TINY && !ISTINY(size)))
         return (NULL);
-    if (add_size <= 0)
-        return (chunk);
     free_part = NEXT_CHUNK(chunk);
     if (ULONG_INT(free_part) > limit || !(free_part->size & S_FREE)
-            || free_part->size < add_size)
+            || free_part->size < (uint64_t)add_size)
         return (NULL);
     tmp = *free_part;
     tmp.size -= add_size;
