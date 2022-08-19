@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 02:56:41 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:19:37 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void    	*create_heap(size_t size);
 void    	*recycle_chunk(t_chunk **bins, size_t size);
 void    	*new_chunk(size_t size, t_chunk *next);
 void    	set_free_chunk(t_chunk *chunk, size_t size, t_chunk *next, t_chunk *prev);
-void        *delete_chunk(t_chunk *chunk);
+void        delete_chunk(t_chunk *chunk, t_chunk **bin);
 void        free_chunk(t_chunk *chunk, t_chunk *next, uint64_t limit);
 void        *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin, uint64_t limit);
 void    	merge_free_zone(t_chunk *chunk, t_chunk **bin, uint64_t limit);

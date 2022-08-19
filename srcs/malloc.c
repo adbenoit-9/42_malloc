@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 15:13:15 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:47:29 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,8 @@ void	free(void *ptr)
 		write(STDERR_FILENO, "free(): double free detected\n", 30);
 		kill(0, SIGABRT);
 	}
-	if (chunk->size & S_LARGE) {
-		chunk = delete_chunk(chunk);
-		if (chunk)
-			g_large_zone = chunk;
-	}
+	if (chunk->size & S_LARGE)
+		delete_chunk(chunk, &g_large_zone);
 	else if (chunk->size & S_TINY) {
 		free_chunk(chunk, g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
 		merge_free_zone(chunk, &g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
@@ -72,15 +69,13 @@ void	*realloc(void *ptr, size_t size)
 	t_chunk	*next;
 
 	if (!ptr || size == 0) {
-		print_metadata(ptr - HEAD_SIZE);
 		free(ptr);
-		PRINT("TEST\n");
 		return (malloc(size));
 	}
 	size = (size % 16 == 0 ? size : (size / 16 + 1) * 16) + HEAD_SIZE;
 	chunk = ptr - HEAD_SIZE;
 	if (GET_SIZE(chunk->size) > size && GET_SIZE(chunk->size) - size > HEAD_SIZE) {
-		next = ptr + size;
+		next = ptr + size - HEAD_SIZE;
 		next->size = chunk->size - size;
 		next->prev_size = size | GET_STATUS(chunk->size);
 		chunk->size = size | GET_STATUS(chunk->size);

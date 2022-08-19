@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 15:12:08 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:08:47 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@ void    realloc_tests(void)
 {
     PRINT("\n\033[33;1m");
     PRINT("+---------------+\n");
-    PRINT("|   realloc     |\n");
+    PRINT("|    realloc    |\n");
     PRINT("+---------------+\n");
     PRINT("\033[0m");
+
     void *ptr = realloc(NULL, 40);
     strcpy(ptr, "this is a test of realloc of size 40...");
     PRINT("\n\033[30m");
@@ -54,10 +55,13 @@ void    realloc_tests(void)
     show_alloc_mem_ex();
     
     PRINT("\n\033[36;1m# large new size\033[0m\n");
-    ptr = realloc(NULL, 1800000);
+    ptr = realloc(ptr, 1800000);
     PRINT("\033[30m");
     show_alloc_mem();
     PRINT("\033[0m");
     
     free(ptr);
+    PRINT("\033[30m");
+    show_alloc_mem();
+    PRINT("\033[0m");
 }
