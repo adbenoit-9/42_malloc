@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/18 22:22:34 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/08/19 16:58:05 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,8 @@ SRC				:=	malloc.c \
 SUB_SRC			:= ft_putnbr_base.c \
 					ft_bzero.c \
 					ft_strlen.c \
-					print_metadata.c
+					print_metadata.c \
+					ft_memcpy.c
 SRC				+= $(addprefix utils/, $(SUB_SRC))
 
 TEST_SRC		:=	main.c \

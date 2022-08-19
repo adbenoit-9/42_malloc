@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 16:47:29 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:58:57 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,8 @@ void	*realloc(void *ptr, size_t size)
 			 	chunk->size & S_TINY ? MAX_TINY : MAX_SMALL));
 	if (!new_ptr) {
 		new_ptr = malloc(size);
-		if (new_ptr) {
-			for (size_t i = 0; ((uint8_t *)ptr)[i] && i < size; i++)
-				((uint8_t *)new_ptr)[i] = ((uint8_t *)ptr)[i];
-		}
+		if (new_ptr)
+			ft_memcpy(new_ptr, ptr, size);
 		free(ptr);
 	}
 	else

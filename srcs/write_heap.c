@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 16:46:10 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:57:36 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void    *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin, uint64_t limit
     tmp = *free_part;
     tmp.size -= add_size;
     tmp.prev_size = size | GET_STATUS(chunk->size);
-    memcpy((void *)chunk + size, &tmp, sizeof(tmp));
+    ft_memcpy((void *)chunk + size, &tmp, sizeof(tmp));
     if (tmp.previous)
         tmp.previous->next = (void *)chunk + size;
     else
