@@ -30,10 +30,16 @@ allocation, and returns a pointer to the allocated memory.\
 If there is an error, return a NULL pointer.
 
 ### free()
-La free() function deallocates the memory allocation pointed to by “ptr”. If “ptr”is
+The free() function deallocates the memory allocation pointed to by “ptr”. If “ptr”is
 a NULL pointer, no operation is performed.
 
-## Link
+### show_alloc_mem()
+The show_alloc_mem() function is a visual on the state of the allocated memory zones.
+
+### show_alloc_mem_ex()
+The show_alloc_mem() function is an hexa dump of the allocated zones.
+
+## Links
 - https://heap-exploitation.dhavalkapil.com/diving_into_glibc_heap/malloc_chunk
 - https://gee.cs.oswego.edu/dl/html/malloc.html
 - https://azeria-labs.com/heap-exploitation-part-1-understanding-the-glibc-heap-implementation/
