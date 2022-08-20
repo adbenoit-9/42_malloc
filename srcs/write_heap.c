@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 16:57:36 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/20 17:40:01 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void    *recycle_chunk(t_chunk **bin, size_t size)
     if (!bin || !*bin)
         return (NULL);
     ptr = *bin;
-    while (ptr->next && GET_SIZE(ptr->size) < size) {
+    while (ptr->next && GET_SIZE(ptr->size) < size
+            && GET_SIZE(ptr->size) - size <= HEAD_SIZE) {
         ptr = ptr->next;
     }
     if (!ptr || GET_SIZE(ptr->size) < size) {

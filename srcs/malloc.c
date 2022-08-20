@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 16:58:57 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/20 17:41:43 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,17 @@ void	*malloc(size_t size)
 	size = (size % 16 == 0 ? size : (size / 16 + 1) * 16) + HEAD_SIZE;
 	ptr = NULL;
 	pthread_mutex_lock(&g_mutex);
+	PRINT("malloc ");
+	ft_putnbr_base(getpid(), DEC);
+	PRINT("\n");
 	if (ISTINY(size)) {
+		PRINT("tiny ");
+		ft_putnbr_base(getpid(), DEC);
+		PRINT("\n");
 		LITTLE_MALLOC(g_tiny_zone, g_tiny_bin, MAX_TINY);
+		PRINT("end ");
+		ft_putnbr_base(getpid(), DEC);
+		PRINT("\n");
 	}
 	else if (ISSMALL(size)) {
 		LITTLE_MALLOC(g_small_zone, g_small_bin, MAX_SMALL);
@@ -43,7 +52,13 @@ void	free(void *ptr)
 
 	if (!ptr)
 		return ;
+	// show_alloc_mem();
 	pthread_mutex_lock(&g_mutex);
+	PRINT("free ");
+	ft_putnbr_base(getpid(), DEC);
+	PRINT("\n");
+	print_metadata(ptr - HEAD_SIZE);
+	// print_metadata(ptr - HEAD_SIZE);
 	chunk = (t_chunk *)(ptr - HEAD_SIZE);
 	if (chunk->size & S_FREE) {
 		write(STDERR_FILENO, "free(): double free detected\n", 30);
@@ -53,11 +68,14 @@ void	free(void *ptr)
 		delete_chunk(chunk, &g_large_zone);
 	else if (chunk->size & S_TINY) {
 		free_chunk(chunk, g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
-		merge_free_zone(chunk, &g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
+		// print_metadata(ptr - HEAD_SIZE);
+		g_tiny_bin = chunk;
+		// merge_free_zone(chunk, &g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
 	}
 	else {
 		free_chunk(chunk, g_small_bin, ZONE_LIMIT(g_small_zone, MAX_SMALL));
-		merge_free_zone(chunk, &g_small_bin, ZONE_LIMIT(g_small_zone, MAX_SMALL));
+		g_small_bin = chunk;
+		// merge_free_zone(chunk, &g_small_bin, ZONE_LIMIT(g_small_zone, MAX_SMALL));
 	}
 	pthread_mutex_unlock(&g_mutex);
 }
@@ -68,6 +86,9 @@ void	*realloc(void *ptr, size_t size)
 	t_chunk	*chunk;
 	t_chunk	*next;
 
+	PRINT("realloc ");
+	ft_putnbr_base(getpid(), DEC);
+	PRINT("\n");
 	if (!ptr || size == 0) {
 		free(ptr);
 		return (malloc(size));
@@ -82,9 +103,11 @@ void	*realloc(void *ptr, size_t size)
 		free(next + 1);
 		return (chunk + 1);
 	}
+	pthread_mutex_lock(&g_mutex);
 	new_ptr = extend_chunk(chunk, size, chunk->size & S_TINY ? &g_tiny_bin : &g_small_bin,\
 			 ZONE_LIMIT(chunk->size & S_TINY ? &g_tiny_zone : &g_small_zone,\
 			 	chunk->size & S_TINY ? MAX_TINY : MAX_SMALL));
+	pthread_mutex_unlock(&g_mutex);
 	if (!new_ptr) {
 		new_ptr = malloc(size);
 		if (new_ptr)
