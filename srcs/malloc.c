@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/20 17:41:43 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/29 20:26:33 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,31 +18,25 @@ void	*malloc(size_t size)
 
 	if (size == 0)
 		return (NULL);
+	pthread_mutex_lock(&g_mutex);
 	size = (size % 16 == 0 ? size : (size / 16 + 1) * 16) + HEAD_SIZE;
 	ptr = NULL;
-	pthread_mutex_lock(&g_mutex);
-	PRINT("malloc ");
-	ft_putnbr_base(getpid(), DEC);
-	PRINT("\n");
 	if (ISTINY(size)) {
-		PRINT("tiny ");
-		ft_putnbr_base(getpid(), DEC);
-		PRINT("\n");
 		LITTLE_MALLOC(g_tiny_zone, g_tiny_bin, MAX_TINY);
-		PRINT("end ");
-		ft_putnbr_base(getpid(), DEC);
-		PRINT("\n");
 	}
 	else if (ISSMALL(size)) {
 		LITTLE_MALLOC(g_small_zone, g_small_bin, MAX_SMALL);
 	}
-	if (!ptr)
+	if (!ptr) {
 		ptr = new_chunk(size, g_large_zone);
-	if (ptr && ((t_chunk *)ptr)->size & S_LARGE)
-		g_large_zone = ptr;
-	pthread_mutex_unlock(&g_mutex);
-	if (ptr)
+		if (ptr) {
+			g_large_zone = ptr;
+		}
+	}
+	if (ptr) {
 		ptr += HEAD_SIZE;
+	}
+	pthread_mutex_unlock(&g_mutex);
 	return (ptr);
 }
 
@@ -50,32 +44,26 @@ void	free(void *ptr)
 {
 	t_chunk *chunk;
 
-	if (!ptr)
-		return ;
-	// show_alloc_mem();
 	pthread_mutex_lock(&g_mutex);
-	PRINT("free ");
-	ft_putnbr_base(getpid(), DEC);
-	PRINT("\n");
-	print_metadata(ptr - HEAD_SIZE);
-	// print_metadata(ptr - HEAD_SIZE);
-	chunk = (t_chunk *)(ptr - HEAD_SIZE);
-	if (chunk->size & S_FREE) {
-		write(STDERR_FILENO, "free(): double free detected\n", 30);
-		kill(0, SIGABRT);
-	}
-	if (chunk->size & S_LARGE)
-		delete_chunk(chunk, &g_large_zone);
-	else if (chunk->size & S_TINY) {
-		free_chunk(chunk, g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
-		// print_metadata(ptr - HEAD_SIZE);
-		g_tiny_bin = chunk;
-		// merge_free_zone(chunk, &g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
-	}
-	else {
-		free_chunk(chunk, g_small_bin, ZONE_LIMIT(g_small_zone, MAX_SMALL));
-		g_small_bin = chunk;
-		// merge_free_zone(chunk, &g_small_bin, ZONE_LIMIT(g_small_zone, MAX_SMALL));
+	if (ptr) {
+		chunk = (t_chunk *)(ptr - HEAD_SIZE);
+		if (chunk->size & S_FREE) {
+			write(STDERR_FILENO, "free(): double free detected\n", 30);
+			kill(0, SIGABRT);
+		}
+		if (chunk->size & S_LARGE)
+			delete_chunk(chunk, &g_large_zone);
+		else if (chunk->size & S_TINY) {
+			free_chunk(chunk, g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
+			// print_metadata(ptr - HEAD_SIZE);
+			// g_tiny_bin = chunk;
+			merge_free_zone(chunk, &g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
+		}
+		else {
+			free_chunk(chunk, g_small_bin, ZONE_LIMIT(g_small_zone, MAX_SMALL));
+			// g_small_bin = chunk;
+			merge_free_zone(chunk, &g_small_bin, ZONE_LIMIT(g_small_zone, MAX_SMALL));
+		}
 	}
 	pthread_mutex_unlock(&g_mutex);
 }
@@ -86,9 +74,6 @@ void	*realloc(void *ptr, size_t size)
 	t_chunk	*chunk;
 	t_chunk	*next;
 
-	PRINT("realloc ");
-	ft_putnbr_base(getpid(), DEC);
-	PRINT("\n");
 	if (!ptr || size == 0) {
 		free(ptr);
 		return (malloc(size));
@@ -101,21 +86,25 @@ void	*realloc(void *ptr, size_t size)
 		next->prev_size = size | GET_STATUS(chunk->size);
 		chunk->size = size | GET_STATUS(chunk->size);
 		free(next + 1);
-		return (chunk + 1);
+		new_ptr = ptr;
 	}
-	pthread_mutex_lock(&g_mutex);
-	new_ptr = extend_chunk(chunk, size, chunk->size & S_TINY ? &g_tiny_bin : &g_small_bin,\
-			 ZONE_LIMIT(chunk->size & S_TINY ? &g_tiny_zone : &g_small_zone,\
-			 	chunk->size & S_TINY ? MAX_TINY : MAX_SMALL));
-	pthread_mutex_unlock(&g_mutex);
-	if (!new_ptr) {
-		new_ptr = malloc(size);
-		if (new_ptr)
-			ft_memcpy(new_ptr, ptr, size);
-		free(ptr);
+	else {
+		pthread_mutex_lock(&g_mutex);
+		new_ptr = extend_chunk(chunk, size, chunk->size & S_TINY ? &g_tiny_bin : &g_small_bin,\
+				ZONE_LIMIT(chunk->size & S_TINY ? &g_tiny_zone : &g_small_zone,\
+					chunk->size & S_TINY ? MAX_TINY : MAX_SMALL));
+		pthread_mutex_unlock(&g_mutex);
+		if (!new_ptr) {
+			new_ptr = malloc(size);
+			if (new_ptr) {
+				ft_memcpy(new_ptr, ptr, size);
+			}
+			free(ptr);
+		}
+		else {
+			new_ptr += HEAD_SIZE;
+		}
 	}
-	else
-		new_ptr += HEAD_SIZE;
 	return (new_ptr);
 }
 

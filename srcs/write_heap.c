@@ -6,19 +6,21 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/20 17:40:01 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/29 20:21:54 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "defs_malloc.h"
-
 void    *create_heap(size_t size)
 {
-	void    *ptr;
+	void            *ptr;
+	struct rlimit   rlim;
 
+    size = size % getpagesize() ? (size / getpagesize() + 1) * getpagesize() : size;
+	if (getrlimit(RLIMIT_DATA, &rlim) < 0 || rlim.rlim_max < size)
+		return (NULL);
 	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
     if (ptr) {
-        ft_bzero(ptr, size);
         ((t_chunk *)ptr)->size = size | S_FREE;
     }
 	return (ptr);
@@ -31,7 +33,8 @@ void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
     t_chunk *newptr;
     
     /* delete free chunk */
-    if (GET_SIZE(free_chunk->size) == size) {
+    if (GET_SIZE(free_chunk->size) == size
+            || GET_SIZE(free_chunk->size) - size < HEAD_SIZE) {
         if (free_chunk->previous)
             free_chunk->previous->next = free_chunk->next;
         if (free_chunk->next)
@@ -125,7 +128,7 @@ void    *new_chunk(size_t size, t_chunk *next)
     chunk->size |= S_LARGE;
     if (next) {
         chunk->next = next;
-        chunk->prev_size = next->size;
+        // chunk->prev_size = next->size;
         next->previous = chunk;
         next->prev_size = chunk->size;
     }
@@ -134,9 +137,9 @@ void    *new_chunk(size_t size, t_chunk *next)
 
 void    free_chunk(t_chunk *chunk, t_chunk *next, uint64_t limit)
 {
-    size_t  size = GET_SIZE(chunk->size);
+    // size_t  size = GET_SIZE(chunk->size);
 
-    ft_bzero(chunk + 1, size - HEAD_SIZE);
+    // ft_bzero(chunk + 1, size - HEAD_SIZE);
     chunk->size |= S_FREE;
     chunk->next = next;
     if (ULONG_INT(NEXT_CHUNK(chunk)) < limit)
@@ -175,7 +178,7 @@ void    merge_free_zone(t_chunk *chunk, t_chunk **bin, uint64_t limit)
             next->previous->next = next->next;
         if (ULONG_INT(NEXT_CHUNK(chunk)) < limit)
             NEXT_CHUNK(chunk)->prev_size = chunk->size;
-        ft_bzero(next, HEAD_SIZE);
+        // ft_bzero(next, HEAD_SIZE);
     }
     if (chunk->prev_size & S_FREE) {
         prev = (void *)chunk - GET_SIZE(chunk->prev_size);
@@ -187,7 +190,7 @@ void    merge_free_zone(t_chunk *chunk, t_chunk **bin, uint64_t limit)
             chunk->previous->next = chunk->next;
         if (ULONG_INT(NEXT_CHUNK(front_merge)) < limit)
             NEXT_CHUNK(front_merge)->prev_size = front_merge->size;
-        ft_bzero(chunk, HEAD_SIZE);
+        // ft_bzero(chunk, HEAD_SIZE);
             
     }
     if (!front_merge) {
