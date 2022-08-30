@@ -6,22 +6,26 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/29 20:21:54 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/30 20:30:21 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "defs_malloc.h"
+
 void    *create_heap(size_t size)
 {
 	void            *ptr;
 	struct rlimit   rlim;
 
-    size = size % getpagesize() ? (size / getpagesize() + 1) * getpagesize() : size;
-	if (getrlimit(RLIMIT_DATA, &rlim) < 0 || rlim.rlim_max < size)
+    // size = size % getpagesize() ? (size / getpagesize() + 1) * getpagesize() : size;
+	if (getrlimit(RLIMIT_DATA, &rlim) > 0 && rlim.rlim_max > size)
 		return (NULL);
 	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-    if (ptr) {
+    if (ptr != MAP_FAILED) {
         ((t_chunk *)ptr)->size = size | S_FREE;
+    }
+    else {
+        ptr = NULL;
     }
 	return (ptr);
 }
@@ -121,27 +125,23 @@ void    *new_chunk(size_t size, t_chunk *next)
     t_chunk *chunk;
 
     chunk = create_heap(size);
-    if (!chunk) {
-        return (NULL);
-    }
-    chunk->size &= ~S_FREE;
-    chunk->size |= S_LARGE;
-    if (next) {
+    if (chunk) {
+        chunk->size &= ~S_FREE;
+        chunk->size |= S_LARGE;
         chunk->next = next;
-        // chunk->prev_size = next->size;
-        next->previous = chunk;
-        next->prev_size = chunk->size;
+        if (next) {
+            next->previous = chunk;
+            // next->prev_size = chunk->size;
+        }
     }
     return (chunk);
 }
 
 void    free_chunk(t_chunk *chunk, t_chunk *next, uint64_t limit)
 {
-    // size_t  size = GET_SIZE(chunk->size);
-
-    // ft_bzero(chunk + 1, size - HEAD_SIZE);
     chunk->size |= S_FREE;
     chunk->next = next;
+    chunk->previous = 0x0;
     if (ULONG_INT(NEXT_CHUNK(chunk)) < limit)
         NEXT_CHUNK(chunk)->prev_size = chunk->size;
     if (chunk->next) {

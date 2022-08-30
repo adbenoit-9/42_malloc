@@ -6,20 +6,63 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 16:15:36 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/30 16:47:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tests.h"
 
-void    free_tests(void)
+struct s_test {
+    char             i;
+    char            *str;
+    struct s_test   *next;    
+};
+
+void    struct_tests(void)
 {
-    PRINT("\n\033[33;1m");
-    PRINT("+---------------+\n");
-    PRINT("|     free      |\n");
-    PRINT("+---------------+\n");
+    struct s_test *tester;
+    struct s_test *it;
+
+    tester = (struct s_test *)malloc(sizeof(struct s_test *));
+    if (!tester) {
+        PRINT("malloc failed !\n");
+        return ;
+    }
+    tester->str = strdup("list");
+    tester->i = '0';
+    tester->next = 0;
+    it = tester;
+    for (int i = 0; i < 300; i++) {
+        it->next = (struct s_test *)malloc(sizeof(struct s_test *));
+        if (!it->next) {
+            PRINT("malloc failed !\n");
+            return ;
+        }
+        it = it->next;
+        it->str = strdup("list");
+        it->i = '1' + i;
+        it->next = 0;
+        ft_putnbr_base(ULONG_INT(it), HEXA);
+        PRINT(" ");
+    }
+    PRINT("\n");
+    // show_alloc_mem_ex();
+    PRINT("\033[30m");
+    show_alloc_mem();
     PRINT("\033[0m");
-    
+    while (tester) {
+        free(tester->str);
+        it = tester;
+        tester = tester->next;
+        free(it);
+    }
+    PRINT("\n\033[30m");
+    show_alloc_mem();
+    PRINT("\033[0m");
+}
+
+void zones_tests(void)
+{
     void *ptr0 = malloc(40);
     void *ptr1 = malloc(4);
     void *ptr2 = malloc(400);
@@ -61,5 +104,20 @@ void    free_tests(void)
     free(ptr5);
     PRINT("\n\033[30m");
     show_alloc_mem();
+    PRINT("\033[0m");
+}
+
+void    free_tests(void)
+{
+    PRINT("\n\033[33;1m");
+    PRINT("+---------------+\n");
+    PRINT("|     free      |\n");
+    PRINT("+---------------+\n");
+    PRINT("\033[0m");
+    
+    // zones_tests();    
+
+    PRINT("\n\033[36;1m# struct tests\033[0m\n");
+    struct_tests();
     PRINT("\033[0m");
 }

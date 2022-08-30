@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 16:41:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 16:20:36 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/30 16:48:49 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ uint64_t	iter_heap_zone(void *top, void (*funct)(t_chunk *), uint8_t zone)
 		while (it) {
 			(*funct)(it);
 			total += GET_SIZE(it->size) - HEAD_SIZE;
-			it = it->previous;
+			it = it->next;
 		}
 	}
 	return (total);

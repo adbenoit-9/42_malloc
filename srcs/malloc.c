@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/29 20:26:33 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/30 20:23:43 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,13 @@ void	free(void *ptr)
 	pthread_mutex_lock(&g_mutex);
 	if (ptr) {
 		chunk = (t_chunk *)(ptr - HEAD_SIZE);
+		// print_metadata(chunk);
 		if (chunk->size & S_FREE) {
-			write(STDERR_FILENO, "free(): double free detected\n", 30);
-			kill(0, SIGABRT);
+			PRINT("---- ");
+			ft_putnbr_base(ULONG_INT(ptr), HEXA);
+			PRINT("\n");
+			// write(STDERR_FILENO, "free(): double free detected\n", 30);
+			// kill(0, SIGABRT);
 		}
 		if (chunk->size & S_LARGE)
 			delete_chunk(chunk, &g_large_zone);
@@ -111,16 +115,11 @@ void	*realloc(void *ptr, size_t size)
 void	show_alloc_mem(void)
 {
 	uint64_t	total;
-	t_chunk		*top;
 
 	pthread_mutex_lock(&g_mutex);
 	total = iter_heap_zone(g_tiny_zone, &print_block, TINY);
 	total += iter_heap_zone(g_small_zone, &print_block, SMALL);
-	top = g_large_zone;
-	while (top && top->next) {
-		top = top->next;
-	}
-	total += iter_heap_zone(top, &print_block, LARGE);
+	total += iter_heap_zone(g_large_zone, &print_block, LARGE);
 	PRINT("Total : ");
 	ft_putnbr_base(total, DEC);
 	PRINT("\n");
