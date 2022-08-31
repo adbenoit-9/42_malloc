@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/31 17:12:01 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 17:29:24 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*malloc(size_t size)
 
 	if (size == 0)
 		return (NULL);
-	// pthread_mutex_lock(&g_mutex);
+	pthread_mutex_lock(&g_mutex);
 	size = (size % 16 == 0 ? size : (size / 16 + 1) * 16) + HEAD_SIZE;
 	ptr = NULL;
 	if (ISTINY(size)) {
@@ -36,7 +36,7 @@ void	*malloc(size_t size)
 	if (ptr) {
 		ptr += HEAD_SIZE;
 	}
-	// pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_unlock(&g_mutex);
 	return (ptr);
 }
 
@@ -44,17 +44,10 @@ void	free(void *ptr)
 {
 	t_chunk *chunk;
 
-	// pthread_mutex_lock(&g_mutex);
-	if (ptr) {
+	if (ptr)
 		chunk = (t_chunk *)(ptr - HEAD_SIZE);
-		if (GET_STATUS(chunk->size) != S_LARGE &&
-				GET_STATUS(chunk->size) != S_SMALL &&
-				GET_STATUS(chunk->size) != S_TINY) {
-					return ;
-		}
-		if (chunk->size & S_FREE) {
-			return ;
-		}
+	pthread_mutex_lock(&g_mutex);
+	if (ptr && !STATUS_ERROR(chunk->size) && !(chunk->size & S_FREE)) {
 		if (chunk->size & S_LARGE) {
 			delete_chunk(chunk, &g_large_zone);
 		}
@@ -79,7 +72,7 @@ void	free(void *ptr)
 			}
 		}
 	}
-	// pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_unlock(&g_mutex);
 }
 
 void	*realloc(void *ptr, size_t size)
@@ -90,10 +83,8 @@ void	*realloc(void *ptr, size_t size)
 
 	if (ptr) {
 		chunk = ptr - HEAD_SIZE;
-		if (GET_STATUS(chunk->size) != S_LARGE &&
-				GET_STATUS(chunk->size) != S_SMALL &&
-				GET_STATUS(chunk->size) != S_TINY) {
-					return (NULL);
+		if (STATUS_ERROR(chunk->size)) {
+			return (NULL);
 		}
 	}
 	if (!ptr || size == 0) {
@@ -101,7 +92,7 @@ void	*realloc(void *ptr, size_t size)
 		return (malloc(size));
 	}
 	size = (size % 16 == 0 ? size : (size / 16 + 1) * 16) + HEAD_SIZE;
-	// pthread_mutex_lock(&g_mutex);
+	pthread_mutex_lock(&g_mutex);
 	if (GET_SIZE(chunk->size) > size && GET_SIZE(chunk->size) - size > HEAD_SIZE) {
 		next = ptr + size - HEAD_SIZE;
 		next->size = chunk->size - size;
@@ -127,7 +118,7 @@ void	*realloc(void *ptr, size_t size)
 			new_ptr += HEAD_SIZE;
 		}
 	}
-	// pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_unlock(&g_mutex);
 	return (new_ptr);
 }
 
@@ -135,21 +126,21 @@ void	show_alloc_mem(void)
 {
 	uint64_t	total;
 
-	// pthread_mutex_lock(&g_mutex);
+	pthread_mutex_lock(&g_mutex);
 	total = iter_heap_zone(g_tiny_zone, &print_block, TINY);
 	total += iter_heap_zone(g_small_zone, &print_block, SMALL);
 	total += iter_heap_zone(g_large_zone, &print_block, LARGE);
 	PRINT("Total : ");
 	ft_putnbr_base(total, DEC);
 	PRINT("\n");
-	// pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_unlock(&g_mutex);
 }
 
 void	show_alloc_mem_ex()
 {
 	t_chunk		*top;
 
-	// pthread_mutex_lock(&g_mutex);
+	pthread_mutex_lock(&g_mutex);
 	iter_heap_zone(g_tiny_zone, &hexa_dump, TINY);
 	iter_heap_zone(g_small_zone, &hexa_dump, SMALL);
 	top = g_large_zone;
@@ -157,5 +148,5 @@ void	show_alloc_mem_ex()
 		top = top->next;
 	}
 	iter_heap_zone(top, &hexa_dump, LARGE);
-	// pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_unlock(&g_mutex);
 }

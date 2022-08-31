@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/31 16:38:03 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 17:28:15 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@
 # define S_LARGE 0b0010
 # define S_FREE 0b0001
 # define GET_STATUS(n) (n & (S_LARGE | S_SMALL | S_TINY))
+# define STATUS_ERROR(n) (GET_STATUS(n) != S_LARGE && GET_STATUS(n) != S_SMALL && GET_STATUS(n) != S_TINY)
 
 /* size */
 # define GET_SIZE(n) (n & ~0b1111)
