@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/31 16:44:27 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 17:47:41 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ void    merge_free_zone(t_chunk *chunk, t_chunk **bin, uint64_t limit)
             next->previous->next = next->next;
         if (ULONG_INT(NEXT_CHUNK(chunk)) < limit)
             NEXT_CHUNK(chunk)->prev_size = chunk->size;
-        // ft_bzero(next, HEAD_SIZE);
     }
     if (chunk->prev_size & S_FREE) {
         prev = (void *)chunk - GET_SIZE(chunk->prev_size);
@@ -195,8 +194,6 @@ void    merge_free_zone(t_chunk *chunk, t_chunk **bin, uint64_t limit)
             chunk->previous->next = chunk->next;
         if (ULONG_INT(NEXT_CHUNK(front_merge)) < limit)
             NEXT_CHUNK(front_merge)->prev_size = front_merge->size;
-        // ft_bzero(chunk, HEAD_SIZE);
-            
     }
     if (!front_merge) {
         *bin = chunk;
