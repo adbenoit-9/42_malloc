@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/20 11:28:38 by jterrazz          #+#    #+#             */
-/*   Updated: 2022/08/30 20:38:54 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 12:18:56 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ static void *run_test_thread() {
 int main(void) {
 	// pthread_t *thread = malloc(sizeof(pthread_t) * 100);
 
-	// run_test_malloc();
-	// run_test_realloc();
+	run_test_malloc();
+	run_test_realloc();
 	run_test_mixed();
 
 	// int i = 0;

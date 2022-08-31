@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/30 20:23:43 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 13:13:12 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,9 @@ void	free(void *ptr)
 			// write(STDERR_FILENO, "free(): double free detected\n", 30);
 			// kill(0, SIGABRT);
 		}
-		if (chunk->size & S_LARGE)
+		if (chunk->size & S_LARGE) {
 			delete_chunk(chunk, &g_large_zone);
+		}
 		else if (chunk->size & S_TINY) {
 			free_chunk(chunk, g_tiny_bin, ZONE_LIMIT(g_tiny_zone, MAX_TINY));
 			// print_metadata(ptr - HEAD_SIZE);
@@ -87,6 +88,9 @@ void	*realloc(void *ptr, size_t size)
 	if (GET_SIZE(chunk->size) > size && GET_SIZE(chunk->size) - size > HEAD_SIZE) {
 		next = ptr + size - HEAD_SIZE;
 		next->size = chunk->size - size;
+		next->previous = chunk;
+		next->next = chunk->next;
+		chunk->next = next;
 		next->prev_size = size | GET_STATUS(chunk->size);
 		chunk->size = size | GET_STATUS(chunk->size);
 		free(next + 1);
@@ -101,7 +105,7 @@ void	*realloc(void *ptr, size_t size)
 		if (!new_ptr) {
 			new_ptr = malloc(size);
 			if (new_ptr) {
-				ft_memcpy(new_ptr, ptr, size);
+				ft_memcpy(new_ptr, ptr, GET_SIZE(chunk->size) - HEAD_SIZE);
 			}
 			free(ptr);
 		}

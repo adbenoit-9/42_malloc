@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/30 18:47:10 by jterrazz          #+#    #+#             */
-/*   Updated: 2022/08/30 20:39:17 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 12:18:33 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ static void test_realloc_mix_2(void) {
 	test = realloc(test, 11);
 	test = realloc(test, 9);
 	test = realloc(test, 8);
+	free(test);
 }
 
 void test_show_alloc_mem_ex(void) {
-    // write(1, "yooooooooooooooooooooooooooooooooooooo---\n", 1);
 	char *test = (char*) malloc(20);
 	char *test2 = (char*) malloc(22);
 	test[0] = 5;
@@ -52,8 +52,6 @@ void test_show_alloc_mem_ex(void) {
 	test[3] = 5;
 	test[4] = 5;
 	test[5] = 5;
-	show_alloc_mem();
-    write(1, "---\n", 1);
 	free(test);
 	free(test2);
 }
@@ -64,4 +62,5 @@ void run_test_mixed(void)
 	test_free_1();
 	test_realloc_mix();
 	test_realloc_mix_2();
+	show_alloc_mem();
 }

@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/30 18:47:16 by jterrazz          #+#    #+#             */
-/*   Updated: 2022/08/30 20:33:48 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 12:38:07 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void test_malloc_null()
 
 static void test_malloc_one()
 {
+    printf("# test_malloc_one\n");
     char *t = (char *)malloc(1);
     if (!t) {
         printf("malloc(1) should return ptr\n");
@@ -37,12 +38,16 @@ static void test_malloc_one()
 
     t[0] = 0;
     free(t);
+    printf("\n");
 }
 
 static void test_malloc_getpagesize()
 {
+    printf("# test_malloc_getpagesize\n");
     void *t = malloc(getpagesize());
+    show_alloc_mem();
     free(t);
+    printf("\n");
 }
 
 // !!!!!!!!!!!!!!!!
@@ -50,6 +55,7 @@ static void test_malloc_getpagesize()
 // CHECK To free all, see if the TINY and SMALL stay
 static void test_malloc_limits()
 {
+    printf("# test_malloc_limits\n");
     void	*t	= malloc(1);
     void	*t0	= malloc(TINY_BLOCK_SIZE);
     void	*t00	= malloc(TINY_BLOCK_SIZE);
@@ -59,41 +65,48 @@ static void test_malloc_limits()
 
     // Should print mallocs in all categories (TINY, SMALL, LARGE)
     show_alloc_mem();
-    write(1, "\n", 1);
     // show_alloc_mem_ex();
     // show_heap_list();
     free(t0);
 
     t0 = malloc(TINY_BLOCK_SIZE - 32);
     // show_alloc_mem();
+    free(t);
     free(t0);
     free(t00);
     free(t000);
     free(t1);
     free(t2);
+    printf("\n");
+    show_alloc_mem();
+    printf("\n");
 }
 
 static void test_malloc_free_size()
 {
+    printf("# test_malloc_free_size\n");
     void *t = malloc(SMALL_BLOCK_SIZE + 1);
 
     // heap should have 0 free_space
     show_alloc_mem();
-    write(1, "\n", 1);
 
     free(t);
+    printf("\n");
+    show_alloc_mem();
+    printf("\n");
 }
 
 void run_test_malloc(void)
 {
+    printf("-- run_test_malloc --\n\n");
     test_malloc_null();
     test_malloc_one();
     test_malloc_getpagesize();
     test_malloc_limits();
     test_malloc_free_size();
 
-    show_alloc_mem();
-    write(1, "\n", 1);
+    show_alloc_mem_ex();
+    printf("\n\n");
     // show_heap_list();
 }
 
