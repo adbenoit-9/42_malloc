@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/30 20:18:48 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 16:38:03 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,19 @@
 # define SMALL 1
 # define LARGE 2
 
-# define MAX_TINY (uint32_t)(getpagesize() / 32)
-# define MAX_SMALL (uint32_t)(getpagesize() / 4)
+# define TINY_ZONE_SIZE (uint64_t)(getpagesize() * 25)
+# define SMALL_ZONE_SIZE (uint64_t)(getpagesize() * 400)
+
+# define MAX_TINY (uint32_t)(TINY_ZONE_SIZE / 100)
+# define MAX_SMALL (uint32_t)(SMALL_ZONE_SIZE / 100)
 
 # define ISTINY(size) (size <= MAX_TINY)
 # define ISSMALL(size) (size > MAX_TINY && size <= MAX_SMALL)
 # define ISLARGE(size) (size > MAX_SMALL)
 
 # define ZONE_SIZE(max) ((max) * 100)
-# define ZONE_LIMIT(top, max) ((uint64_t)(top) + (max) * 100 - HEAD_SIZE)
+# define ZONE_LIMIT(top, max) ((uint64_t)(top) + ZONE_SIZE(max) - HEAD_SIZE)
+# define PAGE_MULTIPLE(n) (((n) / getpagesize() + ((n) % getpagesize == 0 ? 0 : 1)) / getpagesize())
         
 #define LITTLE_MALLOC(zone, bin, zone_size) do {\
         if (zone == 0x0) {\

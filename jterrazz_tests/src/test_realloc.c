@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/30 18:47:22 by jterrazz          #+#    #+#             */
-/*   Updated: 2022/08/31 12:55:49 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 13:49:32 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,22 @@ static void realloc_0() {
 static void realloc_1() {
     printf("# realloc_1\n");
 	char *t = malloc(1);
-	// show_alloc_mem();
-	// printf("\n");
+	show_alloc_mem();
+	printf("\n");
 	
 	t = realloc(t, 1);
-	// show_alloc_mem();
-	// printf("\n");
+	show_alloc_mem();
+	printf("\n");
 
 	t = realloc(t, 10);
-	// show_alloc_mem();
-	// printf("\n");
+	show_alloc_mem();
+	printf("\n");
 	
 	t[0] = 'A';
 	t[9] = 'A';
 	t = realloc(t, TINY_BLOCK_SIZE);
-	// show_alloc_mem();
-	// printf("\n");
+	show_alloc_mem();
+	printf("\n");
 	
 	t = realloc(t, SMALL_BLOCK_SIZE);
 	show_alloc_mem();

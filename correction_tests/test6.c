@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test4.c                                            :+:      :+:    :+:   */
+/*   test6.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/21 15:17:04 by jterrazz          #+#    #+#             */
-/*   Updated: 2022/08/31 15:20:21 by adbenoit         ###   ########.fr       */
+/*   Created: 2022/08/31 16:51:41 by adbenoit          #+#    #+#             */
+/*   Updated: 2022/08/31 16:51:44 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/libft_malloc.h"
-#include <string.h>
+#include <stdlib.h>
 
-void	print(char *s)
+int main()
 {
-	write(1, s, strlen(s));
-}
-
-int		main(void)
-{
-	char *addr;
-
-	addr = malloc(16);
-	free(NULL);
-	free((void *)addr + 5);
-	if (realloc((void *)addr + 5, 10) == NULL)
-		print("Bonjours\n");
-	return (0);
+    malloc(1024);
+    malloc(1024 * 32);
+    malloc(1024 * 1024);
+    malloc(1024 * 1024 * 16);
+    malloc(1024 * 1024 * 128);
+    show_alloc_mem(); 
+    return (0); 
 }

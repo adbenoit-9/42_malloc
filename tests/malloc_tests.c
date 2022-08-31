@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:09 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 16:52:47 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 16:32:10 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,16 @@ void    test_n_malloc_by_zone(uint64_t n)
     show_alloc_mem();
     PRINT("\033[0m");
     for (uint64_t i = 0; i < n; i++) {
-        tiny_ptr[i] = malloc(13);
-        small_ptr[i] = malloc(300);
-        large_ptr[i] = malloc(5000);
+        tiny_ptr[i] = malloc(130);
+        small_ptr[i] = malloc(3000);
+        large_ptr[i] = malloc(50000);
     }
     PRINT("\n\033[30m");
     show_alloc_mem();
     PRINT("\033[0m");
     for (uint64_t i = 0; i < n; i++) {
+        show_alloc_mem();
+        PRINT("---\n");
         free(tiny_ptr[i]);
         free(small_ptr[i]);
         free(large_ptr[i]);

@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/30 18:47:10 by jterrazz          #+#    #+#             */
-/*   Updated: 2022/08/31 12:18:33 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 14:39:33 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,11 @@ void test_show_alloc_mem_ex(void) {
 
 void run_test_mixed(void)
 {
+    printf("-- run_test_mixed --\n\n");
 	test_show_alloc_mem_ex();
 	test_free_1();
 	test_realloc_mix();
 	test_realloc_mix_2();
 	show_alloc_mem();
+    printf("\n\n");
 }

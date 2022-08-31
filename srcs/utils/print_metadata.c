@@ -51,11 +51,11 @@ void    print_metadata(void* ptr)
 	if (*(size_t *)ptr == 0)
 		PRINT("0");
 	else
-		ft_putnbr_base((*(size_t *)ptr & ~0b1111) - 32, DEC);
+		ft_putnbr_base((*(size_t *)ptr & ~0b1111), DEC);
 	PRINT(" bytes | status : ");
 	print_status(*(size_t *)(ptr));
 	PRINT("\nsize : ");
-	ft_putnbr_base((*(size_t *)(ptr + 8) & ~0b1111) - 32, DEC);
+	ft_putnbr_base((*(size_t *)(ptr + 8) & ~0b1111), DEC);
 	PRINT(" bytes\nprevious : 0x");
 	ft_putnbr_base(*(long int *)(ptr + 16), HEXA);
 	PRINT("\nnext : 0x");

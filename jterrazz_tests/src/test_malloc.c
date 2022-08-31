@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/30 18:47:16 by jterrazz          #+#    #+#             */
-/*   Updated: 2022/08/31 12:38:07 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 14:35:58 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ void run_test_malloc(void)
     test_malloc_null();
     test_malloc_one();
     test_malloc_getpagesize();
-    test_malloc_limits();
     test_malloc_free_size();
+    test_malloc_limits();
 
     show_alloc_mem_ex();
     printf("\n\n");

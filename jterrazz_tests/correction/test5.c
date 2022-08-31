@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   test5.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jterrazz <jterrazz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 15:17:08 by jterrazz          #+#    #+#             */
-/*   Updated: 2019/07/22 11:17:52 by jterrazz         ###   ########.fr       */
+/*   Updated: 2022/08/31 15:20:21 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/malloc.h"
+#include "../incs/libft_malloc.h"
 
 int	main(void)
 {

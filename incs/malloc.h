@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 16:19:37 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 16:42:42 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_chunk	*g_small_zone;
 t_chunk	*g_large_zone;
 t_chunk	*g_tiny_bin;
 t_chunk	*g_small_bin;
-pthread_mutex_t	g_mutex = PTHREAD_MUTEX_INITIALIZER;
+// pthread_mutex_t	g_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /*
 ** Handle heap functions

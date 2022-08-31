@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/30 20:30:21 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 16:44:27 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,18 @@ void    *create_heap(size_t size)
 {
 	void            *ptr;
 	struct rlimit   rlim;
+    int             ret;
 
     // size = size % getpagesize() ? (size / getpagesize() + 1) * getpagesize() : size;
-	if (getrlimit(RLIMIT_DATA, &rlim) > 0 && rlim.rlim_max > size)
-		return (NULL);
-	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-    if (ptr != MAP_FAILED) {
-        ((t_chunk *)ptr)->size = size | S_FREE;
+    ret = getrlimit(RLIMIT_DATA, &rlim);
+	if (ret == 0 && rlim.rlim_max > size) {
+        ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+        if (ptr != MAP_FAILED) {
+            ((t_chunk *)ptr)->size = size | S_FREE;
+        }
+        else {
+            ptr = NULL;
+        }
     }
     else {
         ptr = NULL;
