@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/30 16:47:56 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 17:12:58 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void    free_tests(void)
     PRINT("+---------------+\n");
     PRINT("\033[0m");
     
-    // zones_tests();    
+    zones_tests();    
 
     PRINT("\n\033[36;1m# struct tests\033[0m\n");
     struct_tests();

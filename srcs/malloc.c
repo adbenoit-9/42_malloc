@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/31 17:07:30 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/08/31 17:12:01 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	free(void *ptr)
 	// pthread_mutex_lock(&g_mutex);
 	if (ptr) {
 		chunk = (t_chunk *)(ptr - HEAD_SIZE);
-		if (GET_STATUS(chunk->size) != S_LARGE ||
-				GET_STATUS(chunk->size) != S_SMALL ||
+		if (GET_STATUS(chunk->size) != S_LARGE &&
+				GET_STATUS(chunk->size) != S_SMALL &&
 				GET_STATUS(chunk->size) != S_TINY) {
 					return ;
 		}
@@ -90,8 +90,8 @@ void	*realloc(void *ptr, size_t size)
 
 	if (ptr) {
 		chunk = ptr - HEAD_SIZE;
-		if (GET_STATUS(chunk->size) != S_LARGE ||
-				GET_STATUS(chunk->size) != S_SMALL ||
+		if (GET_STATUS(chunk->size) != S_LARGE &&
+				GET_STATUS(chunk->size) != S_SMALL &&
 				GET_STATUS(chunk->size) != S_TINY) {
 					return (NULL);
 		}
