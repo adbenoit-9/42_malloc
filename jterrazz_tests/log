@@ -1,7 +1,0 @@
-yTINY : 0x7FA4EEEF8000
-0x7FA4EEEF8020 - 0x7FA4EEEF8040 : 32 bytes
-0x7FA4EEEF8060 - 0x7FA4EEEF8080 : 32 bytes
-SMALL : 0x0
-LARGE : 0x0
-Total : 64
--malloc() should return ptr
