@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 14:12:26 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 14:34:08 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,6 @@ void	free(void *ptr)
 			zone = chunk->size & S_TINY ? TINY : SMALL;
 			free_chunk(chunk, g_heap.bins[zone], ZONE_LIMIT(g_heap.zones[zone], zone));
 			merge_free_zone(chunk, &g_heap.bins[zone], ZONE_LIMIT(g_heap.zones[zone], zone));
-			if (GET_SIZE(g_heap.zones[zone]->size) == ZONE_SIZE(zone)) {
-				if (munmap(g_heap.zones[zone], GET_SIZE(g_heap.zones[zone]->size)) == 0) {
-					g_heap.zones[zone] = 0x0;
-					g_heap.bins[zone] = 0x0;
-				}
-			}
 		}
 	}
 	pthread_mutex_unlock(&g_mutex.malloc);
