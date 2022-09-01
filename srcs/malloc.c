@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 14:34:08 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 23:23:57 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	free(void *ptr)
 void	*realloc(void *ptr, size_t size)
 {
 	void		*new_ptr;
-	t_chunk		*chunk;
+	t_chunk		*chunk, *to_free;
 	uint16_t	zone;
 
 	pthread_mutex_lock(&g_mutex.realloc);
@@ -76,7 +76,10 @@ void	*realloc(void *ptr, size_t size)
 			size = ALIGN_BITS(size + HEAD_SIZE);
 			if (GET_SIZE(chunk->size) > size &&
 					GET_SIZE(chunk->size) - size > HEAD_SIZE) {
-				free(split_chunk(chunk, size) + 1);
+				pthread_mutex_lock(&g_mutex.malloc);
+				to_free = split_chunk(chunk, size);
+				pthread_mutex_unlock(&g_mutex.malloc);
+				free(to_free + 1);
 				new_ptr = ptr;
 			}
 			else {
