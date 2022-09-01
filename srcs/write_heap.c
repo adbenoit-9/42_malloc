@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/31 17:47:41 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 11:40:58 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,19 @@ void    *new_chunk(size_t size, t_chunk *next)
         }
     }
     return (chunk);
+}
+
+t_chunk    *split_chunk(t_chunk *chunk, size_t n)
+{
+    t_chunk *next = (void *)(chunk + 1) + n - HEAD_SIZE;
+
+    next->size = chunk->size - n;
+    next->previous = chunk;
+    next->next = chunk->next;
+    chunk->next = next;
+    next->prev_size = n | GET_STATUS(chunk->size);
+    chunk->size = n | GET_STATUS(chunk->size);
+    return (next);
 }
 
 void    free_chunk(t_chunk *chunk, t_chunk *next, uint64_t limit)

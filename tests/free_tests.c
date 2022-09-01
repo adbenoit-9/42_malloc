@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/31 17:12:58 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 12:43:04 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,8 @@ void    struct_tests(void)
         it->str = strdup("list");
         it->i = '1' + i;
         it->next = 0;
-        ft_putnbr_base(ULONG_INT(it), HEXA);
-        PRINT(" ");
     }
-    PRINT("\n");
-    // show_alloc_mem_ex();
+    show_alloc_mem_ex();
     PRINT("\033[30m");
     show_alloc_mem();
     PRINT("\033[0m");

@@ -6,12 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:09 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/31 16:32:10 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 12:42:09 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tests.h"
-#include <stdio.h>
 
 void    test_max_malloc_by_zone()
 {
@@ -45,8 +44,6 @@ void    test_n_malloc_by_zone(uint64_t n)
     show_alloc_mem();
     PRINT("\033[0m");
     for (uint64_t i = 0; i < n; i++) {
-        show_alloc_mem();
-        PRINT("---\n");
         free(tiny_ptr[i]);
         free(small_ptr[i]);
         free(large_ptr[i]);

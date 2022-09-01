@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/31 17:15:07 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 11:59:51 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,34 @@
 # include "defs_malloc.h"
 
 /*
+** Structures
+*/
+
+typedef struct s_heap
+{
+    t_chunk *zones[NZONES];
+    t_chunk *bins[NBINS];
+}               t_heap;
+
+typedef struct s_mutexes
+{
+    pthread_mutex_t malloc;
+    pthread_mutex_t free;
+    pthread_mutex_t realloc;
+    pthread_mutex_t print;
+}               t_mutexes;
+
+/*
 ** Global variables
 */
 
-t_chunk	*g_tiny_zone;
-t_chunk	*g_small_zone;
-t_chunk	*g_large_zone;
-t_chunk	*g_tiny_bin;
-t_chunk	*g_small_bin;
-pthread_mutex_t	g_mutex = PTHREAD_MUTEX_INITIALIZER;
+t_heap			g_heap;
+t_mutexes       g_mutex = {
+    .malloc = PTHREAD_MUTEX_INITIALIZER,
+    .free = PTHREAD_MUTEX_INITIALIZER,
+    .realloc = PTHREAD_MUTEX_INITIALIZER,
+    .print = PTHREAD_MUTEX_INITIALIZER,
+};
 
 /*
 ** Handle heap functions
@@ -39,6 +58,7 @@ void        delete_chunk(t_chunk *chunk, t_chunk **bin);
 void        free_chunk(t_chunk *chunk, t_chunk *next, uint64_t limit);
 void        *extend_chunk(t_chunk *chunk, size_t size, t_chunk **bin, uint64_t limit);
 void    	merge_free_zone(t_chunk *chunk, t_chunk **bin, uint64_t limit);
+t_chunk     *split_chunk(t_chunk *chunk, size_t size);
 
 /*
 ** Display heap functions

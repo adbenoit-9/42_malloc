@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:00:00 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 16:25:26 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 12:05:38 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "libft_malloc.h"
 # include "utils.h"
 # include <string.h>
+# include <stdio.h>
 
 void    malloc_tests(void);
 void    realloc_tests(void);

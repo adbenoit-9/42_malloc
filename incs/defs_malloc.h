@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/31 17:28:15 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 11:47:26 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 */
 
 # define NZONES 3
+# define NBINS 2
 
 # define TINY 0
 # define SMALL 1
@@ -41,6 +42,7 @@
 
 # define MAX_TINY (uint32_t)(TINY_ZONE_SIZE / 100)
 # define MAX_SMALL (uint32_t)(SMALL_ZONE_SIZE / 100)
+# define MAX_ZONE(zone) (zone == TINY ? MAX_TINY : MAX_SMALL)
 
 # define ISTINY(size) (size <= MAX_TINY)
 # define ISSMALL(size) (size > MAX_TINY && size <= MAX_SMALL)
@@ -49,15 +51,7 @@
 # define ZONE_SIZE(max) ((max) * 100)
 # define ZONE_LIMIT(top, max) ((uint64_t)(top) + ZONE_SIZE(max) - HEAD_SIZE)
 # define PAGE_MULTIPLE(n) (((n) / getpagesize() + ((n) % getpagesize == 0 ? 0 : 1)) / getpagesize())
-        
-#define LITTLE_MALLOC(zone, bin, zone_size) do {\
-        if (zone == 0x0) {\
-            bin = create_heap(zone_size * 100);\
-        }\
-		ptr = recycle_chunk(&bin, size);\
-		if (zone == 0x0)\
-			zone = ptr;\
-    } while (0);
+# define ALIGN_BITS(n) ((n) % 16 == 0 ? (n) : ((n) / 16 + 1) * 16)
 
 /*
 ** Chunk

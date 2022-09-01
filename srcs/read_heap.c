@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:14:29 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/19 02:25:15 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 12:50:29 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,41 @@ void	print_block(t_chunk *block)
 	PRINT(" bytes\n");
 }
 
-
 void	hexa_dump(t_chunk *chunk)
 {
 	char	*ptr = (char *)(chunk + 1);
 	size_t	size = GET_SIZE(chunk->size) - HEAD_SIZE;
+	char	str[20];
+	int		j;
 
-	PRINT("0x");
-	ft_putnbr_base(ULONG_INT(ptr), HEXA);
-	PRINT("  ");
-	for (size_t i = 0; i < size; i++) {
-		if (*(ptr + i) == 0)
+	str[0] = ' ';
+	str[1] = '|';
+	str[18] = '|';
+	str[19] = '\n';
+	j = 2;
+	for (size_t i = 0; i < size; i++, j++) {
+		if (i % 16 == 0) {
+			PRINT("0x");
+			ft_putnbr_base(ULONG_INT(ptr + size), HEXA);
+			PRINT(" ");
+		}
+		if (*(ptr + i) == 0) {
 			PRINT("00");
-		else
-			ft_putnbr_base(*(ptr + i), HEXA);
-		PRINT(" ");
+			str[j] = '.';
+		}
+		else if ((uint8_t)*(ptr + i) < 0x0F) {
+			PRINT("0");
+		}
+		if (*(ptr + i) != 0) {
+			ft_putnbr_base((uint8_t)*(ptr + i), HEXA);
+			str[j] = ptr[i];
+		}
+		if ((i + 1) % 16 == 0) {
+			j = 1;
+			write(STDOUT_FILENO, str, 20);
+		}
+		else {
+			PRINT(".");
+		}
 	}
-	PRINT("|");
-	for (size_t i = 0; i < size; i++) {
-		if (ptr[i])
-			write(STDOUT_FILENO, &ptr[i], 1);
-		else
-			write(STDOUT_FILENO, ".", 1);
-	}
-	PRINT("|\n");
 }
