@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_metadata.c                                        :+:      :+:    :+:   */
+/*   print_metadata.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/18 21:52:34 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 22:21:41 by adbenoit         ###   ########.fr       */
+/*   Created: 2022/09/01 23:45:11 by adbenoit          #+#    #+#             */
+/*   Updated: 2022/09/01 23:45:45 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #ifdef DEBUG
 
-void 	print_status(size_t status)
+void	print_status(size_t status)
 {
 	if (status & 0b1000)
 		PRINT("tiny");
@@ -28,7 +28,7 @@ void 	print_status(size_t status)
 		PRINT("_free");
 }
 
-void 	print_color(size_t status)
+void	print_color(size_t status)
 {
 	if (status & 0b1000)
 		PRINT("\033[36m");
@@ -38,7 +38,7 @@ void 	print_color(size_t status)
 		PRINT("\033[32m");
 }
 
-void    print_metadata(void* ptr)
+void	print_metadata(void *ptr)
 {
 	if (!ptr) {
 		PRINT("\033[31m-- null pointer --\033[0m\n");

@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:14:29 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 14:12:38 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 23:57:44 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,21 @@ void	hexa_dump(t_chunk *chunk)
 		if (i % 16 == 0) {
 			PRINT("0x");
 			ft_putnbr_base(ULONG_INT(ptr + size), HEXA);
-			PRINT(" ");
+			PRINT("  ");
 		}
-		if (*(ptr + i) == 0) {
-			PRINT("00");
-			str[j] = '.';
-		}
-		else if ((uint8_t)*(ptr + i) < 0x0F) {
+		if ((uint8_t)*(ptr + i) <= 0x0F)
 			PRINT("0");
-		}
-		if (*(ptr + i) != 0) {
-			ft_putnbr_base((uint8_t)*(ptr + i), HEXA);
+		if (*(ptr + i) < 0x20)
+			str[j] = '.';
+		else
 			str[j] = ptr[i];
-		}
+		ft_putnbr_base((uint8_t)*(ptr + i), HEXA);
 		if ((i + 1) % 16 == 0) {
 			j = 1;
 			write(STDOUT_FILENO, str, 20);
 		}
-		else {
-			PRINT(".");
+		else if (i % 2) {
+			PRINT(" ");
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 23:33:50 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 23:47:52 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void	show_alloc_mem(void)
 	pthread_mutex_unlock(&g_mutex.malloc);
 }
 
-void	show_alloc_mem_ex()
+void	show_alloc_mem_ex(void)
 {
 	t_chunk		*top;
 

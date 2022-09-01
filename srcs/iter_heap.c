@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 16:41:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 14:12:38 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 23:43:55 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	print_zone(t_chunk *addr, uint8_t zone)
 {
-	char		*names[] = {"TINY", "SMALL", "LARGE"};
+	static char	*names[] = {"TINY", "SMALL", "LARGE"};
 
 	PRINT(names[zone]);
 	PRINT(" : 0x");
