@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/08/19 16:58:05 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/09/01 14:18:38 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,7 +90,7 @@ all: $(NAME)
 $(BUILD):
 	@mkdir $@ $(DIRS)
 
-$(OBJ_DIR)/%.o:$(SRC_DIR)/%.c ./incs/malloc.h | $(BUILD)
+$(OBJ_DIR)/%.o:$(SRC_DIR)/%.c | $(BUILD)
 	@printf "$(CL_LINE)[$(COMP)] $< ...\r"
 	@$(CC) $(CFLAGS) $(IFLAGS) -fPIC -c $< -o $@
 
@@ -112,5 +112,8 @@ run: $(NAME)
 
 debug: CFLAGS += -DDEBUG
 debug: re
+
+debug_make:
+	@echo $(SRC)
 
 .PHONY: all clean fclean re debug run

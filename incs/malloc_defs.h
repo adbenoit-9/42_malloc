@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   defs_malloc.h                                      :+:      :+:    :+:   */
+/*   malloc_defs.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 14:04:31 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 14:11:35 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEFS_MALLOC_H
-# define DEFS_MALLOC_H
+#ifndef MALLOC_DEFS_H
+# define MALLOC_DEFS_H
 
 # include <unistd.h>
 # include <stdio.h>

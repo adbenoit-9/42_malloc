@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 14:06:33 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 14:12:26 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "malloc_private.h"
 
 void	*malloc(size_t size)
 {
@@ -46,7 +46,7 @@ void	free(void *ptr)
 	t_chunk		*chunk;
 	uint16_t	zone;
 
-	pthread_mutex_lock(&g_mutex.free);
+	pthread_mutex_lock(&g_mutex.malloc);
 	if (ptr)
 		chunk = (t_chunk *)(ptr - HEAD_SIZE);
 	if (ptr && !STATUS_ERROR(chunk->size) && !(chunk->size & S_FREE)) {
@@ -65,7 +65,7 @@ void	free(void *ptr)
 			}
 		}
 	}
-	pthread_mutex_unlock(&g_mutex.free);
+	pthread_mutex_unlock(&g_mutex.malloc);
 }
 
 void	*realloc(void *ptr, size_t size)
@@ -87,7 +87,9 @@ void	*realloc(void *ptr, size_t size)
 			}
 			else {
 				zone = chunk->size & S_TINY ? TINY : SMALL;
+				pthread_mutex_lock(&g_mutex.malloc);
 				new_ptr = extend_chunk(chunk, size, &g_heap.bins[zone], MAX_ZONE(zone));
+				pthread_mutex_unlock(&g_mutex.malloc);
 				if (!new_ptr) {
 					new_ptr = malloc(size);
 					if (new_ptr)
@@ -112,21 +114,21 @@ void	show_alloc_mem(void)
 {
 	uint64_t	total;
 
-	pthread_mutex_lock(&g_mutex.print);
+	pthread_mutex_lock(&g_mutex.malloc);
 	total = iter_heap_zone(g_heap.zones[TINY], &print_block, TINY);
 	total += iter_heap_zone(g_heap.zones[SMALL], &print_block, SMALL);
 	total += iter_heap_zone(g_heap.zones[LARGE], &print_block, LARGE);
 	PRINT("Total : ");
 	ft_putnbr_base(total, DEC);
 	PRINT("\n");
-	pthread_mutex_unlock(&g_mutex.print);
+	pthread_mutex_unlock(&g_mutex.malloc);
 }
 
 void	show_alloc_mem_ex()
 {
 	t_chunk		*top;
 
-	pthread_mutex_lock(&g_mutex.print);
+	pthread_mutex_lock(&g_mutex.malloc);
 	iter_heap_zone(g_heap.zones[TINY], &hexa_dump, TINY);
 	iter_heap_zone(g_heap.zones[SMALL], &hexa_dump, SMALL);
 	top = g_heap.zones[LARGE];
@@ -134,5 +136,5 @@ void	show_alloc_mem_ex()
 		top = top->next;
 	}
 	iter_heap_zone(top, &hexa_dump, LARGE);
-	pthread_mutex_unlock(&g_mutex.print);
+	pthread_mutex_unlock(&g_mutex.malloc);
 }

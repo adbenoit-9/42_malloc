@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft_malloc.h                                     :+:      :+:    :+:   */
+/*   malloc_public.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:31:16 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/08/18 15:46:15 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 14:16:48 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_MALLOC_H
-# define LIBFT_MALLOC_H
+#ifndef MALLOC_PUBLIC_H
+# define MALLOC_PUBLIC_H
 
 # include <stddef.h>
+
+/*
+** libft malloc
+*/
 
 void	free(void *ptr);
 void	*malloc(size_t size);

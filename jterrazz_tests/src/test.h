@@ -6,14 +6,14 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 15:17:19 by jterrazz          #+#    #+#             */
-/*   Updated: 2022/08/31 12:52:12 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 14:12:10 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_TEST
 # define MALLOC_TEST
 
-# include "libft_malloc.h"
+# include "malloc_public.h"
 # include <pthread.h>
 # include "utils.h"
 # include <string.h>

@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 14:05:32 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 14:15:24 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "defs_malloc.h"
+#include "malloc_defs.h"
 
 void    *create_heap(size_t size)
 {
@@ -136,7 +136,6 @@ void    *new_chunk(size_t size, t_chunk *next)
         chunk->next = next;
         if (next) {
             next->previous = chunk;
-            // next->prev_size = chunk->size;
         }
     }
     return (chunk);

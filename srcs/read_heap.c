@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:14:29 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 12:50:29 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 14:12:38 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "defs_malloc.h"
+#include "malloc_defs.h"
 
 void	print_block(t_chunk *block)
 {

@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.h                                           :+:      :+:    :+:   */
+/*   malloc_private.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 11:59:51 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 14:12:38 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MALLOC_H
-# define MALLOC_H
+#ifndef MALLOC_PRIVATE_H
+# define MALLOC_PRIVATE_H
 
-# include "libft_malloc.h"
-# include "defs_malloc.h"
+# include "malloc_public.h"
+# include "malloc_defs.h"
 
 /*
 ** Structures
@@ -41,9 +41,7 @@ typedef struct s_mutexes
 t_heap			g_heap;
 t_mutexes       g_mutex = {
     .malloc = PTHREAD_MUTEX_INITIALIZER,
-    .free = PTHREAD_MUTEX_INITIALIZER,
     .realloc = PTHREAD_MUTEX_INITIALIZER,
-    .print = PTHREAD_MUTEX_INITIALIZER,
 };
 
 /*

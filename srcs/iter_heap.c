@@ -6,11 +6,11 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 16:41:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 14:01:05 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 14:12:38 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "defs_malloc.h"
+#include "malloc_defs.h"
 
 static void	print_zone(t_chunk *addr, uint8_t zone)
 {
