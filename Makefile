@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/09/01 19:38:36 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/09/01 23:35:58 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,6 @@ SRC				:=	malloc.c \
 					read_heap.c \
 					iter_heap.c
 SUB_SRC			:= ft_putnbr_base.c \
-					ft_bzero.c \
 					ft_strlen.c \
 					print_metadata.c \
 					ft_memcpy.c

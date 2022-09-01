@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 15:34:05 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 14:11:35 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 23:34:35 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@
 # define ISLARGE(size) (size > MAX_SMALL)
 
 # define ZONE_LIMIT(top, z) ((uint64_t)(top) + ZONE_SIZE(z) - HEAD_SIZE)
-# define PAGE_MULTIPLE(n) (((n) / getpagesize() + ((n) % getpagesize == 0 ? 0 : 1)) / getpagesize())
 # define ALIGN_BITS(n) ((n) % 16 == 0 ? (n) : ((n) / 16 + 1) * 16)
 
 /*

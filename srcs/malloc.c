@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:12:49 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 23:23:57 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 23:33:50 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	*malloc(size_t size)
 		if (!ISLARGE(size)) {
 			zone = ISTINY(size) ? TINY : SMALL;
 			if (g_heap.zones[zone] == 0x0)
-				g_heap.bins[zone] = create_heap(MAX_ZONE(zone) * 100);
+				g_heap.bins[zone] = create_heap(ZONE_SIZE(zone));
 			ptr = recycle_chunk(&g_heap.bins[zone], size);
 			if (g_heap.zones[zone] == 0x0)
 				g_heap.zones[zone] = ptr;

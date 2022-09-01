@@ -12,6 +12,8 @@
 
 #include "utils.h"
 
+#ifdef DEBUG
+
 void 	print_status(size_t status)
 {
 	if (status & 0b1000)
@@ -62,3 +64,5 @@ void    print_metadata(void* ptr)
 	ft_putnbr_base(*(long int *)(ptr + 24), HEXA);
 	PRINT("\n-----------\033[0m\n");
 }
+
+#endif

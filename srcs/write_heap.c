@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 15:03:43 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 18:28:29 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 23:41:03 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void    *create_heap(size_t size)
 
 /* Set a part of a free zone of the heap in use.
     Returns a pointer to the next free zone. */ 
-void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
+static void    *use_free_chunk(t_chunk *free_chunk, size_t size, size_t status)
 {
     t_chunk *newptr;
     
