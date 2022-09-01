@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/28 12:10:52 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 14:12:38 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 18:27:54 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ typedef struct s_heap
 typedef struct s_mutexes
 {
     pthread_mutex_t malloc;
-    pthread_mutex_t free;
     pthread_mutex_t realloc;
-    pthread_mutex_t print;
 }               t_mutexes;
 
 /*
