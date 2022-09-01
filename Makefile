@@ -6,7 +6,7 @@
 #    By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/28 16:29:13 by adbenoit          #+#    #+#              #
-#    Updated: 2022/09/01 14:18:38 by adbenoit         ###   ########.fr        #
+#    Updated: 2022/09/01 19:38:36 by adbenoit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,8 @@ SRC				+= $(addprefix utils/, $(SUB_SRC))
 TEST_SRC		:=	main.c \
 					malloc_tests.c \
 					realloc_tests.c \
-					free_tests.c
+					free_tests.c \
+					thread_tests.c
 TEST_SRC		:= $(addprefix $(TEST_DIR)/, $(TEST_SRC))
 
 OBJ				:= $(SRC:%.c=$(OBJ_DIR)/%.o)

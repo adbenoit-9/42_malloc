@@ -6,7 +6,7 @@
 /*   By: adbenoit <adbenoit@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 15:04:55 by adbenoit          #+#    #+#             */
-/*   Updated: 2022/09/01 12:43:04 by adbenoit         ###   ########.fr       */
+/*   Updated: 2022/09/01 19:41:21 by adbenoit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ struct s_test {
     struct s_test   *next;    
 };
 
-void    struct_tests(void)
+static void    struct_tests(void)
 {
     struct s_test *tester;
     struct s_test *it;
