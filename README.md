@@ -37,7 +37,7 @@ a NULL pointer, no operation is performed.
 The show_alloc_mem() function is a visual on the state of the allocated memory zones.
 
 ### show_alloc_mem_ex()
-The show_alloc_mem() function is an hexa dump of the allocated zones.
+The show_alloc_mem_ex() function is an hexa dump of the allocated zones.
 
 ## Links
 - https://heap-exploitation.dhavalkapil.com/diving_into_glibc_heap/malloc_chunk
